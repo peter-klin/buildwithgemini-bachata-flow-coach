@@ -1,0 +1,1213 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Build with Gemini · Track 3 — Lab</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Google+Sans+Text:wght@400;500;700&family=Google+Sans:wght@400;500;700&family=Google+Sans+Mono:wght@400&family=Roboto:wght@400;500;700&family=Roboto+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Google+Symbols:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200&family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200&display=block" />
+<script>
+  // Set the theme before first paint (avoids a flash). Uses the saved choice,
+  // falling back to the OS preference on first visit.
+  (function () {
+    try {
+      var saved = localStorage.getItem("theme");
+      var dark = saved ? saved === "dark" : window.matchMedia("(prefers-color-scheme: dark)").matches;
+      document.documentElement.dataset.theme = dark ? "dark" : "light";
+    } catch (e) {
+      document.documentElement.dataset.theme = "light";
+    }
+  })();
+</script>
+<script>
+/**
+ * marked v12.0.2 - a markdown parser
+ * Copyright (c) 2011-2024, Christopher Jeffrey. (MIT Licensed)
+ * https://github.com/markedjs/marked
+ */
+!function(e,t){"object"==typeof exports&&"undefined"!=typeof module?t(exports):"function"==typeof define&&define.amd?define(["exports"],t):t((e="undefined"!=typeof globalThis?globalThis:e||self).marked={})}(this,(function(e){"use strict";function t(){return{async:!1,breaks:!1,extensions:null,gfm:!0,hooks:null,pedantic:!1,renderer:null,silent:!1,tokenizer:null,walkTokens:null}}function n(t){e.defaults=t}e.defaults={async:!1,breaks:!1,extensions:null,gfm:!0,hooks:null,pedantic:!1,renderer:null,silent:!1,tokenizer:null,walkTokens:null};const s=/[&<>"']/,r=new RegExp(s.source,"g"),i=/[<>"']|&(?!(#\d{1,7}|#[Xx][a-fA-F0-9]{1,6}|\w+);)/,l=new RegExp(i.source,"g"),o={"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"},a=e=>o[e];function c(e,t){if(t){if(s.test(e))return e.replace(r,a)}else if(i.test(e))return e.replace(l,a);return e}const h=/&(#(?:\d+)|(?:#x[0-9A-Fa-f]+)|(?:\w+));?/gi;function p(e){return e.replace(h,((e,t)=>"colon"===(t=t.toLowerCase())?":":"#"===t.charAt(0)?"x"===t.charAt(1)?String.fromCharCode(parseInt(t.substring(2),16)):String.fromCharCode(+t.substring(1)):""))}const u=/(^|[^\[])\^/g;function k(e,t){let n="string"==typeof e?e:e.source;t=t||"";const s={replace:(e,t)=>{let r="string"==typeof t?t:t.source;return r=r.replace(u,"$1"),n=n.replace(e,r),s},getRegex:()=>new RegExp(n,t)};return s}function g(e){try{e=encodeURI(e).replace(/%25/g,"%")}catch(e){return null}return e}const f={exec:()=>null};function d(e,t){const n=e.replace(/\|/g,((e,t,n)=>{let s=!1,r=t;for(;--r>=0&&"\\"===n[r];)s=!s;return s?"|":" |"})).split(/ \|/);let s=0;if(n[0].trim()||n.shift(),n.length>0&&!n[n.length-1].trim()&&n.pop(),t)if(n.length>t)n.splice(t);else for(;n.length<t;)n.push("");for(;s<n.length;s++)n[s]=n[s].trim().replace(/\\\|/g,"|");return n}function x(e,t,n){const s=e.length;if(0===s)return"";let r=0;for(;r<s;){const i=e.charAt(s-r-1);if(i!==t||n){if(i===t||!n)break;r++}else r++}return e.slice(0,s-r)}function b(e,t,n,s){const r=t.href,i=t.title?c(t.title):null,l=e[1].replace(/\\([\[\]])/g,"$1");if("!"!==e[0].charAt(0)){s.state.inLink=!0;const e={type:"link",raw:n,href:r,title:i,text:l,tokens:s.inlineTokens(l)};return s.state.inLink=!1,e}return{type:"image",raw:n,href:r,title:i,text:c(l)}}class w{options;rules;lexer;constructor(t){this.options=t||e.defaults}space(e){const t=this.rules.block.newline.exec(e);if(t&&t[0].length>0)return{type:"space",raw:t[0]}}code(e){const t=this.rules.block.code.exec(e);if(t){const e=t[0].replace(/^ {1,4}/gm,"");return{type:"code",raw:t[0],codeBlockStyle:"indented",text:this.options.pedantic?e:x(e,"\n")}}}fences(e){const t=this.rules.block.fences.exec(e);if(t){const e=t[0],n=function(e,t){const n=e.match(/^(\s+)(?:```)/);if(null===n)return t;const s=n[1];return t.split("\n").map((e=>{const t=e.match(/^\s+/);if(null===t)return e;const[n]=t;return n.length>=s.length?e.slice(s.length):e})).join("\n")}(e,t[3]||"");return{type:"code",raw:e,lang:t[2]?t[2].trim().replace(this.rules.inline.anyPunctuation,"$1"):t[2],text:n}}}heading(e){const t=this.rules.block.heading.exec(e);if(t){let e=t[2].trim();if(/#$/.test(e)){const t=x(e,"#");this.options.pedantic?e=t.trim():t&&!/ $/.test(t)||(e=t.trim())}return{type:"heading",raw:t[0],depth:t[1].length,text:e,tokens:this.lexer.inline(e)}}}hr(e){const t=this.rules.block.hr.exec(e);if(t)return{type:"hr",raw:t[0]}}blockquote(e){const t=this.rules.block.blockquote.exec(e);if(t){let e=t[0].replace(/\n {0,3}((?:=+|-+) *)(?=\n|$)/g,"\n    $1");e=x(e.replace(/^ *>[ \t]?/gm,""),"\n");const n=this.lexer.state.top;this.lexer.state.top=!0;const s=this.lexer.blockTokens(e);return this.lexer.state.top=n,{type:"blockquote",raw:t[0],tokens:s,text:e}}}list(e){let t=this.rules.block.list.exec(e);if(t){let n=t[1].trim();const s=n.length>1,r={type:"list",raw:"",ordered:s,start:s?+n.slice(0,-1):"",loose:!1,items:[]};n=s?`\\d{1,9}\\${n.slice(-1)}`:`\\${n}`,this.options.pedantic&&(n=s?n:"[*+-]");const i=new RegExp(`^( {0,3}${n})((?:[\t ][^\\n]*)?(?:\\n|$))`);let l="",o="",a=!1;for(;e;){let n=!1;if(!(t=i.exec(e)))break;if(this.rules.block.hr.test(e))break;l=t[0],e=e.substring(l.length);let s=t[2].split("\n",1)[0].replace(/^\t+/,(e=>" ".repeat(3*e.length))),c=e.split("\n",1)[0],h=0;this.options.pedantic?(h=2,o=s.trimStart()):(h=t[2].search(/[^ ]/),h=h>4?1:h,o=s.slice(h),h+=t[1].length);let p=!1;if(!s&&/^ *$/.test(c)&&(l+=c+"\n",e=e.substring(c.length+1),n=!0),!n){const t=new RegExp(`^ {0,${Math.min(3,h-1)}}(?:[*+-]|\\d{1,9}[.)])((?:[ \t][^\\n]*)?(?:\\n|$))`),n=new RegExp(`^ {0,${Math.min(3,h-1)}}((?:- *){3,}|(?:_ *){3,}|(?:\\* *){3,})(?:\\n+|$)`),r=new RegExp(`^ {0,${Math.min(3,h-1)}}(?:\`\`\`|~~~)`),i=new RegExp(`^ {0,${Math.min(3,h-1)}}#`);for(;e;){const a=e.split("\n",1)[0];if(c=a,this.options.pedantic&&(c=c.replace(/^ {1,4}(?=( {4})*[^ ])/g,"  ")),r.test(c))break;if(i.test(c))break;if(t.test(c))break;if(n.test(e))break;if(c.search(/[^ ]/)>=h||!c.trim())o+="\n"+c.slice(h);else{if(p)break;if(s.search(/[^ ]/)>=4)break;if(r.test(s))break;if(i.test(s))break;if(n.test(s))break;o+="\n"+c}p||c.trim()||(p=!0),l+=a+"\n",e=e.substring(a.length+1),s=c.slice(h)}}r.loose||(a?r.loose=!0:/\n *\n *$/.test(l)&&(a=!0));let u,k=null;this.options.gfm&&(k=/^\[[ xX]\] /.exec(o),k&&(u="[ ] "!==k[0],o=o.replace(/^\[[ xX]\] +/,""))),r.items.push({type:"list_item",raw:l,task:!!k,checked:u,loose:!1,text:o,tokens:[]}),r.raw+=l}r.items[r.items.length-1].raw=l.trimEnd(),r.items[r.items.length-1].text=o.trimEnd(),r.raw=r.raw.trimEnd();for(let e=0;e<r.items.length;e++)if(this.lexer.state.top=!1,r.items[e].tokens=this.lexer.blockTokens(r.items[e].text,[]),!r.loose){const t=r.items[e].tokens.filter((e=>"space"===e.type)),n=t.length>0&&t.some((e=>/\n.*\n/.test(e.raw)));r.loose=n}if(r.loose)for(let e=0;e<r.items.length;e++)r.items[e].loose=!0;return r}}html(e){const t=this.rules.block.html.exec(e);if(t){return{type:"html",block:!0,raw:t[0],pre:"pre"===t[1]||"script"===t[1]||"style"===t[1],text:t[0]}}}def(e){const t=this.rules.block.def.exec(e);if(t){const e=t[1].toLowerCase().replace(/\s+/g," "),n=t[2]?t[2].replace(/^<(.*)>$/,"$1").replace(this.rules.inline.anyPunctuation,"$1"):"",s=t[3]?t[3].substring(1,t[3].length-1).replace(this.rules.inline.anyPunctuation,"$1"):t[3];return{type:"def",tag:e,raw:t[0],href:n,title:s}}}table(e){const t=this.rules.block.table.exec(e);if(!t)return;if(!/[:|]/.test(t[2]))return;const n=d(t[1]),s=t[2].replace(/^\||\| *$/g,"").split("|"),r=t[3]&&t[3].trim()?t[3].replace(/\n[ \t]*$/,"").split("\n"):[],i={type:"table",raw:t[0],header:[],align:[],rows:[]};if(n.length===s.length){for(const e of s)/^ *-+: *$/.test(e)?i.align.push("right"):/^ *:-+: *$/.test(e)?i.align.push("center"):/^ *:-+ *$/.test(e)?i.align.push("left"):i.align.push(null);for(const e of n)i.header.push({text:e,tokens:this.lexer.inline(e)});for(const e of r)i.rows.push(d(e,i.header.length).map((e=>({text:e,tokens:this.lexer.inline(e)}))));return i}}lheading(e){const t=this.rules.block.lheading.exec(e);if(t)return{type:"heading",raw:t[0],depth:"="===t[2].charAt(0)?1:2,text:t[1],tokens:this.lexer.inline(t[1])}}paragraph(e){const t=this.rules.block.paragraph.exec(e);if(t){const e="\n"===t[1].charAt(t[1].length-1)?t[1].slice(0,-1):t[1];return{type:"paragraph",raw:t[0],text:e,tokens:this.lexer.inline(e)}}}text(e){const t=this.rules.block.text.exec(e);if(t)return{type:"text",raw:t[0],text:t[0],tokens:this.lexer.inline(t[0])}}escape(e){const t=this.rules.inline.escape.exec(e);if(t)return{type:"escape",raw:t[0],text:c(t[1])}}tag(e){const t=this.rules.inline.tag.exec(e);if(t)return!this.lexer.state.inLink&&/^<a /i.test(t[0])?this.lexer.state.inLink=!0:this.lexer.state.inLink&&/^<\/a>/i.test(t[0])&&(this.lexer.state.inLink=!1),!this.lexer.state.inRawBlock&&/^<(pre|code|kbd|script)(\s|>)/i.test(t[0])?this.lexer.state.inRawBlock=!0:this.lexer.state.inRawBlock&&/^<\/(pre|code|kbd|script)(\s|>)/i.test(t[0])&&(this.lexer.state.inRawBlock=!1),{type:"html",raw:t[0],inLink:this.lexer.state.inLink,inRawBlock:this.lexer.state.inRawBlock,block:!1,text:t[0]}}link(e){const t=this.rules.inline.link.exec(e);if(t){const e=t[2].trim();if(!this.options.pedantic&&/^</.test(e)){if(!/>$/.test(e))return;const t=x(e.slice(0,-1),"\\");if((e.length-t.length)%2==0)return}else{const e=function(e,t){if(-1===e.indexOf(t[1]))return-1;let n=0;for(let s=0;s<e.length;s++)if("\\"===e[s])s++;else if(e[s]===t[0])n++;else if(e[s]===t[1]&&(n--,n<0))return s;return-1}(t[2],"()");if(e>-1){const n=(0===t[0].indexOf("!")?5:4)+t[1].length+e;t[2]=t[2].substring(0,e),t[0]=t[0].substring(0,n).trim(),t[3]=""}}let n=t[2],s="";if(this.options.pedantic){const e=/^([^'"]*[^\s])\s+(['"])(.*)\2/.exec(n);e&&(n=e[1],s=e[3])}else s=t[3]?t[3].slice(1,-1):"";return n=n.trim(),/^</.test(n)&&(n=this.options.pedantic&&!/>$/.test(e)?n.slice(1):n.slice(1,-1)),b(t,{href:n?n.replace(this.rules.inline.anyPunctuation,"$1"):n,title:s?s.replace(this.rules.inline.anyPunctuation,"$1"):s},t[0],this.lexer)}}reflink(e,t){let n;if((n=this.rules.inline.reflink.exec(e))||(n=this.rules.inline.nolink.exec(e))){const e=t[(n[2]||n[1]).replace(/\s+/g," ").toLowerCase()];if(!e){const e=n[0].charAt(0);return{type:"text",raw:e,text:e}}return b(n,e,n[0],this.lexer)}}emStrong(e,t,n=""){let s=this.rules.inline.emStrongLDelim.exec(e);if(!s)return;if(s[3]&&n.match(/[\p{L}\p{N}]/u))return;if(!(s[1]||s[2]||"")||!n||this.rules.inline.punctuation.exec(n)){const n=[...s[0]].length-1;let r,i,l=n,o=0;const a="*"===s[0][0]?this.rules.inline.emStrongRDelimAst:this.rules.inline.emStrongRDelimUnd;for(a.lastIndex=0,t=t.slice(-1*e.length+n);null!=(s=a.exec(t));){if(r=s[1]||s[2]||s[3]||s[4]||s[5]||s[6],!r)continue;if(i=[...r].length,s[3]||s[4]){l+=i;continue}if((s[5]||s[6])&&n%3&&!((n+i)%3)){o+=i;continue}if(l-=i,l>0)continue;i=Math.min(i,i+l+o);const t=[...s[0]][0].length,a=e.slice(0,n+s.index+t+i);if(Math.min(n,i)%2){const e=a.slice(1,-1);return{type:"em",raw:a,text:e,tokens:this.lexer.inlineTokens(e)}}const c=a.slice(2,-2);return{type:"strong",raw:a,text:c,tokens:this.lexer.inlineTokens(c)}}}}codespan(e){const t=this.rules.inline.code.exec(e);if(t){let e=t[2].replace(/\n/g," ");const n=/[^ ]/.test(e),s=/^ /.test(e)&&/ $/.test(e);return n&&s&&(e=e.substring(1,e.length-1)),e=c(e,!0),{type:"codespan",raw:t[0],text:e}}}br(e){const t=this.rules.inline.br.exec(e);if(t)return{type:"br",raw:t[0]}}del(e){const t=this.rules.inline.del.exec(e);if(t)return{type:"del",raw:t[0],text:t[2],tokens:this.lexer.inlineTokens(t[2])}}autolink(e){const t=this.rules.inline.autolink.exec(e);if(t){let e,n;return"@"===t[2]?(e=c(t[1]),n="mailto:"+e):(e=c(t[1]),n=e),{type:"link",raw:t[0],text:e,href:n,tokens:[{type:"text",raw:e,text:e}]}}}url(e){let t;if(t=this.rules.inline.url.exec(e)){let e,n;if("@"===t[2])e=c(t[0]),n="mailto:"+e;else{let s;do{s=t[0],t[0]=this.rules.inline._backpedal.exec(t[0])?.[0]??""}while(s!==t[0]);e=c(t[0]),n="www."===t[1]?"http://"+t[0]:t[0]}return{type:"link",raw:t[0],text:e,href:n,tokens:[{type:"text",raw:e,text:e}]}}}inlineText(e){const t=this.rules.inline.text.exec(e);if(t){let e;return e=this.lexer.state.inRawBlock?t[0]:c(t[0]),{type:"text",raw:t[0],text:e}}}}const m=/^ {0,3}((?:-[\t ]*){3,}|(?:_[ \t]*){3,}|(?:\*[ \t]*){3,})(?:\n+|$)/,y=/(?:[*+-]|\d{1,9}[.)])/,$=k(/^(?!bull |blockCode|fences|blockquote|heading|html)((?:.|\n(?!\s*?\n|bull |blockCode|fences|blockquote|heading|html))+?)\n {0,3}(=+|-+) *(?:\n+|$)/).replace(/bull/g,y).replace(/blockCode/g,/ {4}/).replace(/fences/g,/ {0,3}(?:`{3,}|~{3,})/).replace(/blockquote/g,/ {0,3}>/).replace(/heading/g,/ {0,3}#{1,6}/).replace(/html/g,/ {0,3}<[^\n>]+>\n/).getRegex(),z=/^([^\n]+(?:\n(?!hr|heading|lheading|blockquote|fences|list|html|table| +\n)[^\n]+)*)/,T=/(?!\s*\])(?:\\.|[^\[\]\\])+/,R=k(/^ {0,3}\[(label)\]: *(?:\n *)?([^<\s][^\s]*|<.*?>)(?:(?: +(?:\n *)?| *\n *)(title))? *(?:\n+|$)/).replace("label",T).replace("title",/(?:"(?:\\"?|[^"\\])*"|'[^'\n]*(?:\n[^'\n]+)*\n?'|\([^()]*\))/).getRegex(),_=k(/^( {0,3}bull)([ \t][^\n]+?)?(?:\n|$)/).replace(/bull/g,y).getRegex(),A="address|article|aside|base|basefont|blockquote|body|caption|center|col|colgroup|dd|details|dialog|dir|div|dl|dt|fieldset|figcaption|figure|footer|form|frame|frameset|h[1-6]|head|header|hr|html|iframe|legend|li|link|main|menu|menuitem|meta|nav|noframes|ol|optgroup|option|p|param|search|section|summary|table|tbody|td|tfoot|th|thead|title|tr|track|ul",S=/<!--(?:-?>|[\s\S]*?(?:-->|$))/,I=k("^ {0,3}(?:<(script|pre|style|textarea)[\\s>][\\s\\S]*?(?:</\\1>[^\\n]*\\n+|$)|comment[^\\n]*(\\n+|$)|<\\?[\\s\\S]*?(?:\\?>\\n*|$)|<![A-Z][\\s\\S]*?(?:>\\n*|$)|<!\\[CDATA\\[[\\s\\S]*?(?:\\]\\]>\\n*|$)|</?(tag)(?: +|\\n|/?>)[\\s\\S]*?(?:(?:\\n *)+\\n|$)|<(?!script|pre|style|textarea)([a-z][\\w-]*)(?:attribute)*? */?>(?=[ \\t]*(?:\\n|$))[\\s\\S]*?(?:(?:\\n *)+\\n|$)|</(?!script|pre|style|textarea)[a-z][\\w-]*\\s*>(?=[ \\t]*(?:\\n|$))[\\s\\S]*?(?:(?:\\n *)+\\n|$))","i").replace("comment",S).replace("tag",A).replace("attribute",/ +[a-zA-Z:_][\w.:-]*(?: *= *"[^"\n]*"| *= *'[^'\n]*'| *= *[^\s"'=<>`]+)?/).getRegex(),E=k(z).replace("hr",m).replace("heading"," {0,3}#{1,6}(?:\\s|$)").replace("|lheading","").replace("|table","").replace("blockquote"," {0,3}>").replace("fences"," {0,3}(?:`{3,}(?=[^`\\n]*\\n)|~{3,})[^\\n]*\\n").replace("list"," {0,3}(?:[*+-]|1[.)]) ").replace("html","</?(?:tag)(?: +|\\n|/?>)|<(?:script|pre|style|textarea|!--)").replace("tag",A).getRegex(),q={blockquote:k(/^( {0,3}> ?(paragraph|[^\n]*)(?:\n|$))+/).replace("paragraph",E).getRegex(),code:/^( {4}[^\n]+(?:\n(?: *(?:\n|$))*)?)+/,def:R,fences:/^ {0,3}(`{3,}(?=[^`\n]*(?:\n|$))|~{3,})([^\n]*)(?:\n|$)(?:|([\s\S]*?)(?:\n|$))(?: {0,3}\1[~`]* *(?=\n|$)|$)/,heading:/^ {0,3}(#{1,6})(?=\s|$)(.*)(?:\n+|$)/,hr:m,html:I,lheading:$,list:_,newline:/^(?: *(?:\n|$))+/,paragraph:E,table:f,text:/^[^\n]+/},Z=k("^ *([^\\n ].*)\\n {0,3}((?:\\| *)?:?-+:? *(?:\\| *:?-+:? *)*(?:\\| *)?)(?:\\n((?:(?! *\\n|hr|heading|blockquote|code|fences|list|html).*(?:\\n|$))*)\\n*|$)").replace("hr",m).replace("heading"," {0,3}#{1,6}(?:\\s|$)").replace("blockquote"," {0,3}>").replace("code"," {4}[^\\n]").replace("fences"," {0,3}(?:`{3,}(?=[^`\\n]*\\n)|~{3,})[^\\n]*\\n").replace("list"," {0,3}(?:[*+-]|1[.)]) ").replace("html","</?(?:tag)(?: +|\\n|/?>)|<(?:script|pre|style|textarea|!--)").replace("tag",A).getRegex(),L={...q,table:Z,paragraph:k(z).replace("hr",m).replace("heading"," {0,3}#{1,6}(?:\\s|$)").replace("|lheading","").replace("table",Z).replace("blockquote"," {0,3}>").replace("fences"," {0,3}(?:`{3,}(?=[^`\\n]*\\n)|~{3,})[^\\n]*\\n").replace("list"," {0,3}(?:[*+-]|1[.)]) ").replace("html","</?(?:tag)(?: +|\\n|/?>)|<(?:script|pre|style|textarea|!--)").replace("tag",A).getRegex()},P={...q,html:k("^ *(?:comment *(?:\\n|\\s*$)|<(tag)[\\s\\S]+?</\\1> *(?:\\n{2,}|\\s*$)|<tag(?:\"[^\"]*\"|'[^']*'|\\s[^'\"/>\\s]*)*?/?> *(?:\\n{2,}|\\s*$))").replace("comment",S).replace(/tag/g,"(?!(?:a|em|strong|small|s|cite|q|dfn|abbr|data|time|code|var|samp|kbd|sub|sup|i|b|u|mark|ruby|rt|rp|bdi|bdo|span|br|wbr|ins|del|img)\\b)\\w+(?!:|[^\\w\\s@]*@)\\b").getRegex(),def:/^ *\[([^\]]+)\]: *<?([^\s>]+)>?(?: +(["(][^\n]+[")]))? *(?:\n+|$)/,heading:/^(#{1,6})(.*)(?:\n+|$)/,fences:f,lheading:/^(.+?)\n {0,3}(=+|-+) *(?:\n+|$)/,paragraph:k(z).replace("hr",m).replace("heading"," *#{1,6} *[^\n]").replace("lheading",$).replace("|table","").replace("blockquote"," {0,3}>").replace("|fences","").replace("|list","").replace("|html","").replace("|tag","").getRegex()},Q=/^\\([!"#$%&'()*+,\-./:;<=>?@\[\]\\^_`{|}~])/,v=/^( {2,}|\\)\n(?!\s*$)/,B="\\p{P}\\p{S}",C=k(/^((?![*_])[\spunctuation])/,"u").replace(/punctuation/g,B).getRegex(),M=k(/^(?:\*+(?:((?!\*)[punct])|[^\s*]))|^_+(?:((?!_)[punct])|([^\s_]))/,"u").replace(/punct/g,B).getRegex(),O=k("^[^_*]*?__[^_*]*?\\*[^_*]*?(?=__)|[^*]+(?=[^*])|(?!\\*)[punct](\\*+)(?=[\\s]|$)|[^punct\\s](\\*+)(?!\\*)(?=[punct\\s]|$)|(?!\\*)[punct\\s](\\*+)(?=[^punct\\s])|[\\s](\\*+)(?!\\*)(?=[punct])|(?!\\*)[punct](\\*+)(?!\\*)(?=[punct])|[^punct\\s](\\*+)(?=[^punct\\s])","gu").replace(/punct/g,B).getRegex(),D=k("^[^_*]*?\\*\\*[^_*]*?_[^_*]*?(?=\\*\\*)|[^_]+(?=[^_])|(?!_)[punct](_+)(?=[\\s]|$)|[^punct\\s](_+)(?!_)(?=[punct\\s]|$)|(?!_)[punct\\s](_+)(?=[^punct\\s])|[\\s](_+)(?!_)(?=[punct])|(?!_)[punct](_+)(?!_)(?=[punct])","gu").replace(/punct/g,B).getRegex(),j=k(/\\([punct])/,"gu").replace(/punct/g,B).getRegex(),H=k(/^<(scheme:[^\s\x00-\x1f<>]*|email)>/).replace("scheme",/[a-zA-Z][a-zA-Z0-9+.-]{1,31}/).replace("email",/[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+(@)[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)+(?![-_])/).getRegex(),U=k(S).replace("(?:--\x3e|$)","--\x3e").getRegex(),X=k("^comment|^</[a-zA-Z][\\w:-]*\\s*>|^<[a-zA-Z][\\w-]*(?:attribute)*?\\s*/?>|^<\\?[\\s\\S]*?\\?>|^<![a-zA-Z]+\\s[\\s\\S]*?>|^<!\\[CDATA\\[[\\s\\S]*?\\]\\]>").replace("comment",U).replace("attribute",/\s+[a-zA-Z:_][\w.:-]*(?:\s*=\s*"[^"]*"|\s*=\s*'[^']*'|\s*=\s*[^\s"'=<>`]+)?/).getRegex(),F=/(?:\[(?:\\.|[^\[\]\\])*\]|\\.|`[^`]*`|[^\[\]\\`])*?/,N=k(/^!?\[(label)\]\(\s*(href)(?:\s+(title))?\s*\)/).replace("label",F).replace("href",/<(?:\\.|[^\n<>\\])+>|[^\s\x00-\x1f]*/).replace("title",/"(?:\\"?|[^"\\])*"|'(?:\\'?|[^'\\])*'|\((?:\\\)?|[^)\\])*\)/).getRegex(),G=k(/^!?\[(label)\]\[(ref)\]/).replace("label",F).replace("ref",T).getRegex(),J=k(/^!?\[(ref)\](?:\[\])?/).replace("ref",T).getRegex(),K={_backpedal:f,anyPunctuation:j,autolink:H,blockSkip:/\[[^[\]]*?\]\([^\(\)]*?\)|`[^`]*?`|<[^<>]*?>/g,br:v,code:/^(`+)([^`]|[^`][\s\S]*?[^`])\1(?!`)/,del:f,emStrongLDelim:M,emStrongRDelimAst:O,emStrongRDelimUnd:D,escape:Q,link:N,nolink:J,punctuation:C,reflink:G,reflinkSearch:k("reflink|nolink(?!\\()","g").replace("reflink",G).replace("nolink",J).getRegex(),tag:X,text:/^(`+|[^`])(?:(?= {2,}\n)|[\s\S]*?(?:(?=[\\<!\[`*_]|\b_|$)|[^ ](?= {2,}\n)))/,url:f},V={...K,link:k(/^!?\[(label)\]\((.*?)\)/).replace("label",F).getRegex(),reflink:k(/^!?\[(label)\]\s*\[([^\]]*)\]/).replace("label",F).getRegex()},W={...K,escape:k(Q).replace("])","~|])").getRegex(),url:k(/^((?:ftp|https?):\/\/|www\.)(?:[a-zA-Z0-9\-]+\.?)+[^\s<]*|^email/,"i").replace("email",/[A-Za-z0-9._+-]+(@)[a-zA-Z0-9-_]+(?:\.[a-zA-Z0-9-_]*[a-zA-Z0-9])+(?![-_])/).getRegex(),_backpedal:/(?:[^?!.,:;*_'"~()&]+|\([^)]*\)|&(?![a-zA-Z0-9]+;$)|[?!.,:;*_'"~)]+(?!$))+/,del:/^(~~?)(?=[^\s~])([\s\S]*?[^\s~])\1(?=[^~]|$)/,text:/^([`~]+|[^`~])(?:(?= {2,}\n)|(?=[a-zA-Z0-9.!#$%&'*+\/=?_`{\|}~-]+@)|[\s\S]*?(?:(?=[\\<!\[`*~_]|\b_|https?:\/\/|ftp:\/\/|www\.|$)|[^ ](?= {2,}\n)|[^a-zA-Z0-9.!#$%&'*+\/=?_`{\|}~-](?=[a-zA-Z0-9.!#$%&'*+\/=?_`{\|}~-]+@)))/},Y={...W,br:k(v).replace("{2,}","*").getRegex(),text:k(W.text).replace("\\b_","\\b_| {2,}\\n").replace(/\{2,\}/g,"*").getRegex()},ee={normal:q,gfm:L,pedantic:P},te={normal:K,gfm:W,breaks:Y,pedantic:V};class ne{tokens;options;state;tokenizer;inlineQueue;constructor(t){this.tokens=[],this.tokens.links=Object.create(null),this.options=t||e.defaults,this.options.tokenizer=this.options.tokenizer||new w,this.tokenizer=this.options.tokenizer,this.tokenizer.options=this.options,this.tokenizer.lexer=this,this.inlineQueue=[],this.state={inLink:!1,inRawBlock:!1,top:!0};const n={block:ee.normal,inline:te.normal};this.options.pedantic?(n.block=ee.pedantic,n.inline=te.pedantic):this.options.gfm&&(n.block=ee.gfm,this.options.breaks?n.inline=te.breaks:n.inline=te.gfm),this.tokenizer.rules=n}static get rules(){return{block:ee,inline:te}}static lex(e,t){return new ne(t).lex(e)}static lexInline(e,t){return new ne(t).inlineTokens(e)}lex(e){e=e.replace(/\r\n|\r/g,"\n"),this.blockTokens(e,this.tokens);for(let e=0;e<this.inlineQueue.length;e++){const t=this.inlineQueue[e];this.inlineTokens(t.src,t.tokens)}return this.inlineQueue=[],this.tokens}blockTokens(e,t=[]){let n,s,r,i;for(e=this.options.pedantic?e.replace(/\t/g,"    ").replace(/^ +$/gm,""):e.replace(/^( *)(\t+)/gm,((e,t,n)=>t+"    ".repeat(n.length)));e;)if(!(this.options.extensions&&this.options.extensions.block&&this.options.extensions.block.some((s=>!!(n=s.call({lexer:this},e,t))&&(e=e.substring(n.raw.length),t.push(n),!0)))))if(n=this.tokenizer.space(e))e=e.substring(n.raw.length),1===n.raw.length&&t.length>0?t[t.length-1].raw+="\n":t.push(n);else if(n=this.tokenizer.code(e))e=e.substring(n.raw.length),s=t[t.length-1],!s||"paragraph"!==s.type&&"text"!==s.type?t.push(n):(s.raw+="\n"+n.raw,s.text+="\n"+n.text,this.inlineQueue[this.inlineQueue.length-1].src=s.text);else if(n=this.tokenizer.fences(e))e=e.substring(n.raw.length),t.push(n);else if(n=this.tokenizer.heading(e))e=e.substring(n.raw.length),t.push(n);else if(n=this.tokenizer.hr(e))e=e.substring(n.raw.length),t.push(n);else if(n=this.tokenizer.blockquote(e))e=e.substring(n.raw.length),t.push(n);else if(n=this.tokenizer.list(e))e=e.substring(n.raw.length),t.push(n);else if(n=this.tokenizer.html(e))e=e.substring(n.raw.length),t.push(n);else if(n=this.tokenizer.def(e))e=e.substring(n.raw.length),s=t[t.length-1],!s||"paragraph"!==s.type&&"text"!==s.type?this.tokens.links[n.tag]||(this.tokens.links[n.tag]={href:n.href,title:n.title}):(s.raw+="\n"+n.raw,s.text+="\n"+n.raw,this.inlineQueue[this.inlineQueue.length-1].src=s.text);else if(n=this.tokenizer.table(e))e=e.substring(n.raw.length),t.push(n);else if(n=this.tokenizer.lheading(e))e=e.substring(n.raw.length),t.push(n);else{if(r=e,this.options.extensions&&this.options.extensions.startBlock){let t=1/0;const n=e.slice(1);let s;this.options.extensions.startBlock.forEach((e=>{s=e.call({lexer:this},n),"number"==typeof s&&s>=0&&(t=Math.min(t,s))})),t<1/0&&t>=0&&(r=e.substring(0,t+1))}if(this.state.top&&(n=this.tokenizer.paragraph(r)))s=t[t.length-1],i&&"paragraph"===s.type?(s.raw+="\n"+n.raw,s.text+="\n"+n.text,this.inlineQueue.pop(),this.inlineQueue[this.inlineQueue.length-1].src=s.text):t.push(n),i=r.length!==e.length,e=e.substring(n.raw.length);else if(n=this.tokenizer.text(e))e=e.substring(n.raw.length),s=t[t.length-1],s&&"text"===s.type?(s.raw+="\n"+n.raw,s.text+="\n"+n.text,this.inlineQueue.pop(),this.inlineQueue[this.inlineQueue.length-1].src=s.text):t.push(n);else if(e){const t="Infinite loop on byte: "+e.charCodeAt(0);if(this.options.silent){console.error(t);break}throw new Error(t)}}return this.state.top=!0,t}inline(e,t=[]){return this.inlineQueue.push({src:e,tokens:t}),t}inlineTokens(e,t=[]){let n,s,r,i,l,o,a=e;if(this.tokens.links){const e=Object.keys(this.tokens.links);if(e.length>0)for(;null!=(i=this.tokenizer.rules.inline.reflinkSearch.exec(a));)e.includes(i[0].slice(i[0].lastIndexOf("[")+1,-1))&&(a=a.slice(0,i.index)+"["+"a".repeat(i[0].length-2)+"]"+a.slice(this.tokenizer.rules.inline.reflinkSearch.lastIndex))}for(;null!=(i=this.tokenizer.rules.inline.blockSkip.exec(a));)a=a.slice(0,i.index)+"["+"a".repeat(i[0].length-2)+"]"+a.slice(this.tokenizer.rules.inline.blockSkip.lastIndex);for(;null!=(i=this.tokenizer.rules.inline.anyPunctuation.exec(a));)a=a.slice(0,i.index)+"++"+a.slice(this.tokenizer.rules.inline.anyPunctuation.lastIndex);for(;e;)if(l||(o=""),l=!1,!(this.options.extensions&&this.options.extensions.inline&&this.options.extensions.inline.some((s=>!!(n=s.call({lexer:this},e,t))&&(e=e.substring(n.raw.length),t.push(n),!0)))))if(n=this.tokenizer.escape(e))e=e.substring(n.raw.length),t.push(n);else if(n=this.tokenizer.tag(e))e=e.substring(n.raw.length),s=t[t.length-1],s&&"text"===n.type&&"text"===s.type?(s.raw+=n.raw,s.text+=n.text):t.push(n);else if(n=this.tokenizer.link(e))e=e.substring(n.raw.length),t.push(n);else if(n=this.tokenizer.reflink(e,this.tokens.links))e=e.substring(n.raw.length),s=t[t.length-1],s&&"text"===n.type&&"text"===s.type?(s.raw+=n.raw,s.text+=n.text):t.push(n);else if(n=this.tokenizer.emStrong(e,a,o))e=e.substring(n.raw.length),t.push(n);else if(n=this.tokenizer.codespan(e))e=e.substring(n.raw.length),t.push(n);else if(n=this.tokenizer.br(e))e=e.substring(n.raw.length),t.push(n);else if(n=this.tokenizer.del(e))e=e.substring(n.raw.length),t.push(n);else if(n=this.tokenizer.autolink(e))e=e.substring(n.raw.length),t.push(n);else if(this.state.inLink||!(n=this.tokenizer.url(e))){if(r=e,this.options.extensions&&this.options.extensions.startInline){let t=1/0;const n=e.slice(1);let s;this.options.extensions.startInline.forEach((e=>{s=e.call({lexer:this},n),"number"==typeof s&&s>=0&&(t=Math.min(t,s))})),t<1/0&&t>=0&&(r=e.substring(0,t+1))}if(n=this.tokenizer.inlineText(r))e=e.substring(n.raw.length),"_"!==n.raw.slice(-1)&&(o=n.raw.slice(-1)),l=!0,s=t[t.length-1],s&&"text"===s.type?(s.raw+=n.raw,s.text+=n.text):t.push(n);else if(e){const t="Infinite loop on byte: "+e.charCodeAt(0);if(this.options.silent){console.error(t);break}throw new Error(t)}}else e=e.substring(n.raw.length),t.push(n);return t}}class se{options;constructor(t){this.options=t||e.defaults}code(e,t,n){const s=(t||"").match(/^\S*/)?.[0];return e=e.replace(/\n$/,"")+"\n",s?'<pre><code class="language-'+c(s)+'">'+(n?e:c(e,!0))+"</code></pre>\n":"<pre><code>"+(n?e:c(e,!0))+"</code></pre>\n"}blockquote(e){return`<blockquote>\n${e}</blockquote>\n`}html(e,t){return e}heading(e,t,n){return`<h${t}>${e}</h${t}>\n`}hr(){return"<hr>\n"}list(e,t,n){const s=t?"ol":"ul";return"<"+s+(t&&1!==n?' start="'+n+'"':"")+">\n"+e+"</"+s+">\n"}listitem(e,t,n){return`<li>${e}</li>\n`}checkbox(e){return"<input "+(e?'checked="" ':"")+'disabled="" type="checkbox">'}paragraph(e){return`<p>${e}</p>\n`}table(e,t){return t&&(t=`<tbody>${t}</tbody>`),"<table>\n<thead>\n"+e+"</thead>\n"+t+"</table>\n"}tablerow(e){return`<tr>\n${e}</tr>\n`}tablecell(e,t){const n=t.header?"th":"td";return(t.align?`<${n} align="${t.align}">`:`<${n}>`)+e+`</${n}>\n`}strong(e){return`<strong>${e}</strong>`}em(e){return`<em>${e}</em>`}codespan(e){return`<code>${e}</code>`}br(){return"<br>"}del(e){return`<del>${e}</del>`}link(e,t,n){const s=g(e);if(null===s)return n;let r='<a href="'+(e=s)+'"';return t&&(r+=' title="'+t+'"'),r+=">"+n+"</a>",r}image(e,t,n){const s=g(e);if(null===s)return n;let r=`<img src="${e=s}" alt="${n}"`;return t&&(r+=` title="${t}"`),r+=">",r}text(e){return e}}class re{strong(e){return e}em(e){return e}codespan(e){return e}del(e){return e}html(e){return e}text(e){return e}link(e,t,n){return""+n}image(e,t,n){return""+n}br(){return""}}class ie{options;renderer;textRenderer;constructor(t){this.options=t||e.defaults,this.options.renderer=this.options.renderer||new se,this.renderer=this.options.renderer,this.renderer.options=this.options,this.textRenderer=new re}static parse(e,t){return new ie(t).parse(e)}static parseInline(e,t){return new ie(t).parseInline(e)}parse(e,t=!0){let n="";for(let s=0;s<e.length;s++){const r=e[s];if(this.options.extensions&&this.options.extensions.renderers&&this.options.extensions.renderers[r.type]){const e=r,t=this.options.extensions.renderers[e.type].call({parser:this},e);if(!1!==t||!["space","hr","heading","code","table","blockquote","list","html","paragraph","text"].includes(e.type)){n+=t||"";continue}}switch(r.type){case"space":continue;case"hr":n+=this.renderer.hr();continue;case"heading":{const e=r;n+=this.renderer.heading(this.parseInline(e.tokens),e.depth,p(this.parseInline(e.tokens,this.textRenderer)));continue}case"code":{const e=r;n+=this.renderer.code(e.text,e.lang,!!e.escaped);continue}case"table":{const e=r;let t="",s="";for(let t=0;t<e.header.length;t++)s+=this.renderer.tablecell(this.parseInline(e.header[t].tokens),{header:!0,align:e.align[t]});t+=this.renderer.tablerow(s);let i="";for(let t=0;t<e.rows.length;t++){const n=e.rows[t];s="";for(let t=0;t<n.length;t++)s+=this.renderer.tablecell(this.parseInline(n[t].tokens),{header:!1,align:e.align[t]});i+=this.renderer.tablerow(s)}n+=this.renderer.table(t,i);continue}case"blockquote":{const e=r,t=this.parse(e.tokens);n+=this.renderer.blockquote(t);continue}case"list":{const e=r,t=e.ordered,s=e.start,i=e.loose;let l="";for(let t=0;t<e.items.length;t++){const n=e.items[t],s=n.checked,r=n.task;let o="";if(n.task){const e=this.renderer.checkbox(!!s);i?n.tokens.length>0&&"paragraph"===n.tokens[0].type?(n.tokens[0].text=e+" "+n.tokens[0].text,n.tokens[0].tokens&&n.tokens[0].tokens.length>0&&"text"===n.tokens[0].tokens[0].type&&(n.tokens[0].tokens[0].text=e+" "+n.tokens[0].tokens[0].text)):n.tokens.unshift({type:"text",text:e+" "}):o+=e+" "}o+=this.parse(n.tokens,i),l+=this.renderer.listitem(o,r,!!s)}n+=this.renderer.list(l,t,s);continue}case"html":{const e=r;n+=this.renderer.html(e.text,e.block);continue}case"paragraph":{const e=r;n+=this.renderer.paragraph(this.parseInline(e.tokens));continue}case"text":{let i=r,l=i.tokens?this.parseInline(i.tokens):i.text;for(;s+1<e.length&&"text"===e[s+1].type;)i=e[++s],l+="\n"+(i.tokens?this.parseInline(i.tokens):i.text);n+=t?this.renderer.paragraph(l):l;continue}default:{const e='Token with "'+r.type+'" type was not found.';if(this.options.silent)return console.error(e),"";throw new Error(e)}}}return n}parseInline(e,t){t=t||this.renderer;let n="";for(let s=0;s<e.length;s++){const r=e[s];if(this.options.extensions&&this.options.extensions.renderers&&this.options.extensions.renderers[r.type]){const e=this.options.extensions.renderers[r.type].call({parser:this},r);if(!1!==e||!["escape","html","link","image","strong","em","codespan","br","del","text"].includes(r.type)){n+=e||"";continue}}switch(r.type){case"escape":{const e=r;n+=t.text(e.text);break}case"html":{const e=r;n+=t.html(e.text);break}case"link":{const e=r;n+=t.link(e.href,e.title,this.parseInline(e.tokens,t));break}case"image":{const e=r;n+=t.image(e.href,e.title,e.text);break}case"strong":{const e=r;n+=t.strong(this.parseInline(e.tokens,t));break}case"em":{const e=r;n+=t.em(this.parseInline(e.tokens,t));break}case"codespan":{const e=r;n+=t.codespan(e.text);break}case"br":n+=t.br();break;case"del":{const e=r;n+=t.del(this.parseInline(e.tokens,t));break}case"text":{const e=r;n+=t.text(e.text);break}default:{const e='Token with "'+r.type+'" type was not found.';if(this.options.silent)return console.error(e),"";throw new Error(e)}}}return n}}class le{options;constructor(t){this.options=t||e.defaults}static passThroughHooks=new Set(["preprocess","postprocess","processAllTokens"]);preprocess(e){return e}postprocess(e){return e}processAllTokens(e){return e}}class oe{defaults={async:!1,breaks:!1,extensions:null,gfm:!0,hooks:null,pedantic:!1,renderer:null,silent:!1,tokenizer:null,walkTokens:null};options=this.setOptions;parse=this.#e(ne.lex,ie.parse);parseInline=this.#e(ne.lexInline,ie.parseInline);Parser=ie;Renderer=se;TextRenderer=re;Lexer=ne;Tokenizer=w;Hooks=le;constructor(...e){this.use(...e)}walkTokens(e,t){let n=[];for(const s of e)switch(n=n.concat(t.call(this,s)),s.type){case"table":{const e=s;for(const s of e.header)n=n.concat(this.walkTokens(s.tokens,t));for(const s of e.rows)for(const e of s)n=n.concat(this.walkTokens(e.tokens,t));break}case"list":{const e=s;n=n.concat(this.walkTokens(e.items,t));break}default:{const e=s;this.defaults.extensions?.childTokens?.[e.type]?this.defaults.extensions.childTokens[e.type].forEach((s=>{const r=e[s].flat(1/0);n=n.concat(this.walkTokens(r,t))})):e.tokens&&(n=n.concat(this.walkTokens(e.tokens,t)))}}return n}use(...e){const t=this.defaults.extensions||{renderers:{},childTokens:{}};return e.forEach((e=>{const n={...e};if(n.async=this.defaults.async||n.async||!1,e.extensions&&(e.extensions.forEach((e=>{if(!e.name)throw new Error("extension name required");if("renderer"in e){const n=t.renderers[e.name];t.renderers[e.name]=n?function(...t){let s=e.renderer.apply(this,t);return!1===s&&(s=n.apply(this,t)),s}:e.renderer}if("tokenizer"in e){if(!e.level||"block"!==e.level&&"inline"!==e.level)throw new Error("extension level must be 'block' or 'inline'");const n=t[e.level];n?n.unshift(e.tokenizer):t[e.level]=[e.tokenizer],e.start&&("block"===e.level?t.startBlock?t.startBlock.push(e.start):t.startBlock=[e.start]:"inline"===e.level&&(t.startInline?t.startInline.push(e.start):t.startInline=[e.start]))}"childTokens"in e&&e.childTokens&&(t.childTokens[e.name]=e.childTokens)})),n.extensions=t),e.renderer){const t=this.defaults.renderer||new se(this.defaults);for(const n in e.renderer){if(!(n in t))throw new Error(`renderer '${n}' does not exist`);if("options"===n)continue;const s=n,r=e.renderer[s],i=t[s];t[s]=(...e)=>{let n=r.apply(t,e);return!1===n&&(n=i.apply(t,e)),n||""}}n.renderer=t}if(e.tokenizer){const t=this.defaults.tokenizer||new w(this.defaults);for(const n in e.tokenizer){if(!(n in t))throw new Error(`tokenizer '${n}' does not exist`);if(["options","rules","lexer"].includes(n))continue;const s=n,r=e.tokenizer[s],i=t[s];t[s]=(...e)=>{let n=r.apply(t,e);return!1===n&&(n=i.apply(t,e)),n}}n.tokenizer=t}if(e.hooks){const t=this.defaults.hooks||new le;for(const n in e.hooks){if(!(n in t))throw new Error(`hook '${n}' does not exist`);if("options"===n)continue;const s=n,r=e.hooks[s],i=t[s];le.passThroughHooks.has(n)?t[s]=e=>{if(this.defaults.async)return Promise.resolve(r.call(t,e)).then((e=>i.call(t,e)));const n=r.call(t,e);return i.call(t,n)}:t[s]=(...e)=>{let n=r.apply(t,e);return!1===n&&(n=i.apply(t,e)),n}}n.hooks=t}if(e.walkTokens){const t=this.defaults.walkTokens,s=e.walkTokens;n.walkTokens=function(e){let n=[];return n.push(s.call(this,e)),t&&(n=n.concat(t.call(this,e))),n}}this.defaults={...this.defaults,...n}})),this}setOptions(e){return this.defaults={...this.defaults,...e},this}lexer(e,t){return ne.lex(e,t??this.defaults)}parser(e,t){return ie.parse(e,t??this.defaults)}#e(e,t){return(n,s)=>{const r={...s},i={...this.defaults,...r};!0===this.defaults.async&&!1===r.async&&(i.silent||console.warn("marked(): The async option was set to true by an extension. The async: false option sent to parse will be ignored."),i.async=!0);const l=this.#t(!!i.silent,!!i.async);if(null==n)return l(new Error("marked(): input parameter is undefined or null"));if("string"!=typeof n)return l(new Error("marked(): input parameter is of type "+Object.prototype.toString.call(n)+", string expected"));if(i.hooks&&(i.hooks.options=i),i.async)return Promise.resolve(i.hooks?i.hooks.preprocess(n):n).then((t=>e(t,i))).then((e=>i.hooks?i.hooks.processAllTokens(e):e)).then((e=>i.walkTokens?Promise.all(this.walkTokens(e,i.walkTokens)).then((()=>e)):e)).then((e=>t(e,i))).then((e=>i.hooks?i.hooks.postprocess(e):e)).catch(l);try{i.hooks&&(n=i.hooks.preprocess(n));let s=e(n,i);i.hooks&&(s=i.hooks.processAllTokens(s)),i.walkTokens&&this.walkTokens(s,i.walkTokens);let r=t(s,i);return i.hooks&&(r=i.hooks.postprocess(r)),r}catch(e){return l(e)}}}#t(e,t){return n=>{if(n.message+="\nPlease report this to https://github.com/markedjs/marked.",e){const e="<p>An error occurred:</p><pre>"+c(n.message+"",!0)+"</pre>";return t?Promise.resolve(e):e}if(t)return Promise.reject(n);throw n}}}const ae=new oe;function ce(e,t){return ae.parse(e,t)}ce.options=ce.setOptions=function(e){return ae.setOptions(e),ce.defaults=ae.defaults,n(ce.defaults),ce},ce.getDefaults=t,ce.defaults=e.defaults,ce.use=function(...e){return ae.use(...e),ce.defaults=ae.defaults,n(ce.defaults),ce},ce.walkTokens=function(e,t){return ae.walkTokens(e,t)},ce.parseInline=ae.parseInline,ce.Parser=ie,ce.parser=ie.parse,ce.Renderer=se,ce.TextRenderer=re,ce.Lexer=ne,ce.lexer=ne.lex,ce.Tokenizer=w,ce.Hooks=le,ce.parse=ce;const he=ce.options,pe=ce.setOptions,ue=ce.use,ke=ce.walkTokens,ge=ce.parseInline,fe=ce,de=ie.parse,xe=ne.lex;e.Hooks=le,e.Lexer=ne,e.Marked=oe,e.Parser=ie,e.Renderer=se,e.TextRenderer=re,e.Tokenizer=w,e.getDefaults=t,e.lexer=xe,e.marked=ce,e.options=he,e.parse=fe,e.parseInline=ge,e.parser=de,e.setOptions=pe,e.use=ue,e.walkTokens=ke}));
+
+</script>
+<style>
+  :root {
+    /* --- Google Material 3 tokens (ported from the GM3 "Google" theme; see /styles/colors-themes-gm3.ts) --- */
+    --color-primary: #0E57D0;
+    --color-on-primary: #FFFFFF;
+    --color-primary-container: #D3E3FD;
+    --color-on-primary-container: #0842A1;
+    --color-secondary: #01639C;
+    --color-on-secondary: #FFFFFF;
+    --color-secondary-container: #C1E7FF;
+    --color-on-secondary-container: #004A76;
+    --color-tertiary: #146C2E;
+    --color-on-tertiary: #FFFFFF;
+    --color-tertiary-container: #C4EED1;
+    --color-on-tertiary-container: #125223;
+    --color-error: #B3261E;
+    --color-on-error: #FFFFFF;
+    --color-error-container: #F9DEDC;
+    --color-on-error-container: #8C1D18;
+    --color-background: #FFFFFF;
+    --color-on-background: #1F1F1F;
+    --color-surface: #FFFFFF;
+    --color-on-surface: #1F1F1F;
+    --color-surface-variant: #E0E3E1;
+    --color-on-surface-variant: #444746;
+    --color-outline: #747775;
+    --color-outline-variant: #C4C7C5;
+    --color-inverse-surface: #303030;
+    --color-inverse-on-surface: #F2F2F2;
+    --color-inverse-primary: #A9C7FB;
+    --color-surface-dim: #D4DBE4;
+    --color-surface-bright: #FFFFFF;
+    --color-surface-container-lowest: #FFFFFF;
+    --color-surface-container-low: #F9FAFD;
+    --color-surface-container: #F0F4F9;
+    --color-surface-container-high: #E8EEF6;
+    --color-surface-container-highest: #DDE3E9;
+    --color-selection-background: #cae5ff;
+    --color-selection-text: #000000;
+
+    /* Google brand accents (hero stripe) */
+    --google-blue: #4285F4;
+    --google-red: #EA4335;
+    --google-yellow: #FBBC04;
+    --google-green: #34A853;
+
+    /* Warning role (Google yellow) — not part of the base M3 set */
+    --color-warning: #E37400;
+    --color-warning-container: #FEEFC3;
+    --color-on-warning-container: #5C3D00;
+
+    /* Elevation (M3, light) */
+    --shadow-elevation-1: 0px 1px 2px 0px rgba(0,0,0,0.3), 0px 1px 3px 1px rgba(0,0,0,0.15);
+    --shadow-elevation-2: 0px 1px 2px 0px rgba(0,0,0,0.3), 0px 2px 6px 2px rgba(0,0,0,0.15);
+    --shadow-elevation-3: 0px 1px 3px 0px rgba(0,0,0,0.3), 0px 4px 8px 3px rgba(0,0,0,0.15);
+
+    /* Shape scale (M3) */
+    --radius-xs: 4px;
+    --radius-sm: 8px;
+    --radius-md: 12px;
+    --radius-lg: 16px;
+    --radius-xl: 28px;
+
+    /* Code block surfaces (kept dark in both themes, per original design) */
+    --code-bg: #202124;
+    --code-fg: #E8EAED;
+
+    /* --- Legacy aliases mapped onto M3 roles (keeps existing rules working) --- */
+    --bg: var(--color-background);
+    --surface: var(--color-surface);
+    --border: var(--color-outline-variant);
+    --text: var(--color-on-surface);
+    --text-muted: var(--color-on-surface-variant);
+    --accent: var(--color-primary);
+    --accent-light: var(--color-primary-container);
+    --danger: var(--color-error);
+    --success: var(--color-tertiary);
+    --success-light: var(--color-tertiary-container);
+    --warning: var(--color-warning);
+    --warning-light: var(--color-warning-container);
+    --font: 'Google Sans Text', Roboto, system-ui, -apple-system, "Segoe UI", sans-serif;
+    --font-brand: 'Google Sans', 'Google Sans Text', Roboto, sans-serif;
+    --mono: 'Google Sans Mono', 'Roboto Mono', ui-monospace, "SF Mono", monospace;
+    --radius: var(--radius-md);
+    --shadow: var(--shadow-elevation-1);
+  }
+
+  :root[data-theme="dark"] {
+      --color-primary: #A7C7FA;
+      --color-on-primary: #072E70;
+      --color-primary-container: #0842A1;
+      --color-on-primary-container: #D3E3FD;
+      --color-secondary: #80CFFF;
+      --color-on-secondary: #003355;
+      --color-secondary-container: #004A77;
+      --color-on-secondary-container: #C1E7FF;
+      --color-tertiary: #6DD58C;
+      --color-on-tertiary: #0A3818;
+      --color-tertiary-container: #125223;
+      --color-on-tertiary-container: #C4EED1;
+      --color-error: #F1B8B5;
+      --color-on-error: #5F1410;
+      --color-error-container: #8C1D18;
+      --color-on-error-container: #F9DEDC;
+      --color-background: #131314;
+      --color-on-background: #E3E3E3;
+      --color-surface: #131314;
+      --color-on-surface: #E3E3E3;
+      --color-surface-variant: #444746;
+      --color-on-surface-variant: #C4C7C5;
+      --color-outline: #8E918F;
+      --color-outline-variant: #444746;
+      --color-inverse-surface: #E3E3E3;
+      --color-inverse-on-surface: #131314;
+      --color-inverse-primary: #0E57D0;
+      --color-surface-dim: #131314;
+      --color-surface-bright: #39393A;
+      --color-surface-container-lowest: #0D0E0E;
+      --color-surface-container-low: #1C1C1D;
+      --color-surface-container: #202021;
+      --color-surface-container-high: #2A2B2C;
+      --color-surface-container-highest: #353637;
+      --color-selection-background: #38587A;
+      --color-selection-text: #ffffff;
+      --color-warning: #FDD663;
+      --color-warning-container: #5C3D00;
+      --color-on-warning-container: #FEEFC3;
+      /* Lighter than the dark surface (#131314) so code blocks stand out */
+      --code-bg: #282A2D;
+      --code-fg: #E8EAED;
+      --shadow-elevation-1: 0px 1px 3px 1px rgba(0,0,0,0.15), 0px 1px 2px 0px rgba(0,0,0,0.3);
+      --shadow-elevation-2: 0px 2px 6px 2px rgba(0,0,0,0.15), 0px 1px 2px 0px rgba(0,0,0,0.3);
+      --shadow-elevation-3: 0px 4px 8px 3px rgba(0,0,0,0.15), 0px 1px 3px 0px rgba(0,0,0,0.3);
+  }
+
+  ::selection { background: var(--color-selection-background); color: var(--color-selection-text); }
+  ::-moz-selection { background: var(--color-selection-background); color: var(--color-selection-text); }
+
+  .material-symbols-outlined {
+    font-family: 'Google Symbols', 'Material Symbols Outlined';
+    font-weight: normal; font-style: normal; line-height: 1;
+    letter-spacing: normal; text-transform: none; display: inline-block;
+    white-space: nowrap; word-wrap: normal; direction: ltr; -webkit-font-smoothing: antialiased;
+  }
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  html { scroll-behavior: smooth; }
+  body { font-family: var(--font); color: var(--text); background: var(--bg); line-height: 1.65; }
+
+  /* Sidebar — M3 navigation drawer */
+  .sidebar {
+    position: fixed; top: 0; left: 0; width: 280px; height: 100vh;
+    background: var(--color-surface-container-low); color: var(--color-on-surface-variant);
+    overflow-y: auto; z-index: 100; display: flex; flex-direction: column;
+    border-right: 1px solid var(--color-outline-variant);
+  }
+  .sidebar-header { padding: 1.5rem 1.25rem 1rem; }
+  .sidebar-header .title { font-family: var(--font-brand); font-size: 1rem; font-weight: 500; color: var(--color-on-surface); letter-spacing: 0; }
+  .sidebar-header .subtitle { font-size: .75rem; color: var(--color-on-surface-variant); margin-top: .25rem; }
+  .sidebar nav { flex: 1; padding: .5rem .75rem; }
+  .sidebar a {
+    display: block; padding: .625rem 1rem; margin: .125rem 0; color: var(--color-on-surface-variant);
+    text-decoration: none; font-family: var(--font); font-size: .875rem; font-weight: 500;
+    border-radius: var(--radius-xl); line-height: 1.35;
+    transition: background .15s, color .15s;
+  }
+  .sidebar a:hover { background: var(--color-surface-container-highest); color: var(--color-on-surface); }
+  /* Active nav item picks up the Google 4-color rotation assigned to its section (see .section-color-N below) */
+  .sidebar a.active { background: var(--color-secondary-container); color: var(--color-on-secondary-container); font-weight: 700; }
+  .sidebar a.active.section-color-0 { background: var(--color-primary-container); color: var(--color-on-primary-container); }
+  .sidebar a.active.section-color-1 { background: var(--color-error-container); color: var(--color-on-error-container); }
+  .sidebar a.active.section-color-2 { background: var(--color-warning-container); color: var(--color-on-warning-container); }
+  .sidebar a.active.section-color-3 { background: var(--color-tertiary-container); color: var(--color-on-tertiary-container); }
+  .sidebar-footer { padding: .875rem 1.25rem; border-top: 1px solid var(--color-outline-variant); font-size: .7rem; color: var(--color-on-surface-variant); }
+  .reload-dot { display:inline-block; width:8px; height:8px; border-radius:50%; background: var(--color-tertiary); margin-right:.4rem; vertical-align:middle; transition:opacity .3s; }
+
+  .main { margin-left: 280px; }
+
+  /* Theme toggle — M3 icon button */
+  .theme-toggle {
+    position: fixed; top: 1rem; right: 1rem; z-index: 200;
+    display: inline-flex; align-items: center; justify-content: center;
+    width: 44px; height: 44px; border-radius: 50%;
+    background: var(--color-surface-container-high); color: var(--color-on-surface-variant);
+    border: 1px solid var(--color-outline-variant); box-shadow: var(--shadow-elevation-1);
+    cursor: pointer; transition: background .15s, color .15s, box-shadow .15s;
+  }
+  .theme-toggle:hover { background: var(--color-surface-container-highest); color: var(--color-on-surface); box-shadow: var(--shadow-elevation-2); }
+  .theme-toggle:focus-visible { outline: 2px solid var(--color-primary); outline-offset: 2px; }
+  .theme-toggle .material-symbols-outlined { font-size: 22px; }
+
+  /* Hero */
+  .hero {
+    background: linear-gradient(135deg, #0842A1 0%, #0E57D0 45%, #01639C 100%);
+    color: #fff; padding: 3rem 2rem 2.5rem; text-align: center; position: relative; overflow: hidden;
+  }
+  .hero::after {
+    content: ""; position: absolute; bottom: 0; left: 0; right: 0; height: 5px;
+    background: linear-gradient(90deg, var(--google-blue) 0 25%, var(--google-red) 25% 50%, var(--google-yellow) 50% 75%, var(--google-green) 75% 100%);
+  }
+  .hero-track { font-family: var(--font); font-size: .75rem; letter-spacing: 2px; text-transform: uppercase; opacity: .85; margin-bottom: .5rem; font-weight: 500; }
+  .hero h1 { font-family: var(--font-brand); font-size: 2.25rem; font-weight: 500; margin-bottom: .5rem; letter-spacing: -.5px; }
+  .hero-sub { font-family: var(--font); font-size: 1.05rem; opacity: .9; max-width: 680px; margin: 0 auto; }
+
+  /* Content */
+  .container { max-width: 880px; margin: 0 auto; padding: 2rem 1.5rem 5rem; }
+
+  #content h1 {
+    font-family: var(--font-brand); font-size: 1.75rem; font-weight: 500; margin: 2.75rem 0 1rem;
+    padding-bottom: .5rem; border-bottom: 2px solid var(--color-primary); color: var(--color-on-surface); scroll-margin-top: 1rem; letter-spacing: -.25px;
+  }
+  /* Section headers rotate through the same 4 Google colors as the hero divider */
+  #content h1.section-color-0 { border-bottom-color: var(--color-primary); }
+  #content h1.section-color-1 { border-bottom-color: var(--color-error); }
+  #content h1.section-color-2 { border-bottom-color: var(--color-warning); }
+  #content h1.section-color-3 { border-bottom-color: var(--color-tertiary); }
+  #content h1:first-child { margin-top: .5rem; }
+  #content h2 { font-family: var(--font-brand); font-size: 1.35rem; font-weight: 500; margin: 2rem 0 .85rem; color: var(--color-on-surface); scroll-margin-top: 1rem; }
+  #content h3, #content h4 { font-family: var(--font-brand); font-weight: 500; margin: 1.4rem 0 .6rem; color: var(--color-on-surface); }
+  #content h4 { font-size: .95rem; text-transform: uppercase; letter-spacing: .5px; color: var(--color-on-surface-variant); }
+  #content p { margin-bottom: .9rem; }
+  #content ul, #content ol { margin: 0 0 1rem 1.4rem; }
+  #content li { margin-bottom: .35rem; }
+  #content a { color: var(--accent); text-decoration: none; }
+  #content a:hover { text-decoration: underline; }
+  #content strong { font-weight: 700; }
+  #content img { max-width: 100%; height: auto; border: 1px solid var(--color-outline-variant); border-radius: var(--radius-md); box-shadow: var(--shadow-elevation-1); margin: 1rem 0; display: block; }
+  #content hr { border: none; border-top: 1px solid var(--color-outline-variant); margin: 2.5rem 0; }
+
+  /* Inline code */
+  #content code {
+    background: var(--color-surface-container-high); padding: .15rem .4rem; border-radius: var(--radius-xs);
+    font-family: var(--mono); font-size: .88em; color: var(--color-primary);
+  }
+  /* Code / prompt blocks -> dark, like the reference */
+  #content pre {
+    background: var(--code-bg); color: var(--code-fg); padding: 1.15rem 1.25rem; border-radius: var(--radius-md);
+    border: 1px solid var(--color-outline-variant);
+    overflow-x: auto; margin: 1rem 0; position: relative; box-shadow: var(--shadow-elevation-2);
+  }
+  #content pre code {
+    background: none; color: inherit; padding: 0; font-family: var(--mono);
+    font-size: .86rem; line-height: 1.6; white-space: pre-wrap; word-break: break-word;
+  }
+  /* Clickable copy-to-clipboard button on every code block */
+  #content pre .copy-btn {
+    position: absolute; top: .5rem; right: .5rem;
+    display: inline-flex; align-items: center; gap: .3rem;
+    background: rgba(255,255,255,.12); color: #E8EAED;
+    border: none; border-radius: var(--radius-xl);
+    padding: .3rem .75rem; font-size: .68rem; font-weight: 500;
+    font-family: var(--font); cursor: pointer; text-transform: uppercase;
+    letter-spacing: .5px; line-height: 1; opacity: .6;
+    transition: background .15s, color .15s, opacity .15s;
+  }
+  #content pre:hover .copy-btn { opacity: 1; }
+  #content pre .copy-btn:hover { background: rgba(255,255,255,.22); color: #fff; }
+  #content pre .copy-btn:focus-visible { outline: 2px solid var(--color-primary); outline-offset: 2px; opacity: 1; }
+  #content pre .copy-btn.copied {
+    background: var(--color-tertiary); color: var(--color-on-tertiary); opacity: 1;
+  }
+
+  /* Blockquotes -> M3 tonal callout with a leading Material Symbol */
+  #content blockquote {
+    position: relative; background: var(--color-primary-container); border: none;
+    border-radius: var(--radius-md); padding: 1rem 1.25rem 1rem 3.25rem; margin: 1.25rem 0;
+    color: var(--color-on-primary-container);
+  }
+  #content blockquote::before {
+    font-family: 'Google Symbols', 'Material Symbols Outlined'; content: 'info';
+    position: absolute; left: 1rem; top: 1rem; font-size: 1.35rem; line-height: 1; color: var(--color-primary);
+  }
+  #content blockquote p:last-child { margin-bottom: 0; }
+  #content blockquote pre { margin: .75rem 0; }
+  /* Placeholder callouts (author TODOs) */
+  #content blockquote.ph-image {
+    background: var(--color-tertiary-container); color: var(--color-on-tertiary-container);
+  }
+  #content blockquote.ph-image::before { content: 'image'; color: var(--color-tertiary); }
+  #content blockquote.ph-todo {
+    background: var(--color-warning-container); color: var(--color-on-warning-container);
+  }
+  #content blockquote.ph-todo::before { content: 'warning'; color: var(--color-warning); }
+  #content blockquote.ph-presenter {
+    background: var(--color-secondary-container); color: var(--color-on-secondary-container);
+  }
+  #content blockquote.ph-presenter::before { content: 'co_present'; color: var(--color-secondary); }
+  #content blockquote.ph-presenter strong { color: var(--color-on-secondary-container); }
+  #content blockquote.ph-presenter code { background: rgba(0,0,0,.10); color: var(--color-on-secondary-container); }
+  #content blockquote.ph-presenter em { color: var(--color-on-surface-variant); }
+  /* Presenter notes stay hidden on the participant-facing site */
+  #content blockquote.ph-presenter { display: none; }
+  /* Pending (not-yet-added) screenshots render as a clean placeholder, not a broken icon */
+  #content .img-pending {
+    background: var(--color-tertiary-container); border: 1px dashed var(--color-tertiary); color: var(--color-on-tertiary-container);
+    border-radius: var(--radius-md); padding:1rem 1.25rem; margin:1rem 0; font-size:.88rem; font-weight:500;
+  }
+
+  /* Tables */
+  #content table { width: 100%; border-collapse: collapse; font-size: .9rem; margin: 1rem 0; border: 1px solid var(--color-outline-variant); border-radius: var(--radius-md); overflow: hidden; }
+  #content th, #content td { padding: .625rem .85rem; border: 1px solid var(--color-outline-variant); text-align: left; }
+  #content th { background: var(--color-surface-container-high); font-weight: 700; color: var(--color-on-surface); }
+  #content tr:hover td { background: var(--color-surface-container); }
+
+  /* TODO highlighting so gaps are obvious while authoring */
+  #content h1:has(+ *)  { }
+  .todo-flag { background: var(--warning-light); border-left: 4px solid var(--warning); padding: .1rem .4rem; border-radius: 4px; }
+
+  #status { padding: 3rem; text-align: center; color: var(--text-muted); }
+
+  @media (max-width: 900px) {
+    .sidebar { display: none; }
+    .main { margin-left: 0; }
+  }
+</style>
+</head>
+<body>
+<button id="theme-toggle" class="theme-toggle" type="button" aria-label="Toggle light and dark theme" title="Toggle theme">
+  <span class="material-symbols-outlined" id="theme-icon">dark_mode</span>
+</button>
+<aside class="sidebar">
+  <div class="sidebar-header">
+    <div class="title">Build with Gemini · Track 3</div>
+    <div class="subtitle">Build an agent-first app</div>
+  </div>
+  <nav id="toc"></nav>
+  <div class="sidebar-footer">
+    <div><span class="reload-dot" id="dot"></span><span id="footer-status">Live preview · auto-reloads</span></div>
+  </div>
+</aside>
+
+<div class="main">
+  <div class="hero">
+    <div class="hero-track">Lab Guide</div>
+    <h1 id="hero-title">Build with Gemini · Track 3</h1>
+    <p class="hero-sub">Prototype, equip, evaluate, and deploy your own agent-first application on Google Cloud.</p>
+  </div>
+  <div class="container">
+    <div id="content"><div id="status">Loading tutorial…</div></div>
+  </div>
+</div>
+
+<script type="text/markdown" id="md-inline">
+# Introduction
+
+In this lab, you'll learn how to build an entire production-ready agentic application using Google Cloud tools.
+
+You will:
+
+- Prototype an agent using `agents-cli`
+- Equip your agent with an enterprise-ready harness that includes Memory, Sessions, Tools, Persistent Storage, and code execution
+- Evaluate and improve the quality of your agent's responses
+- Deploy your agent to Agent Platform
+- Equip your agent with the power to use Google's Generative Models
+- Build an agent-first frontend, hosted on Cloud Run and powered by [A2UI](https://a2ui.org/)
+
+# Set Up Your Environment
+
+For this lab, you'll be given access to a temporary GCP environment plus a **remote virtual desktop** where you'll do all your development. Everything runs in the cloud — your code, your tools, and **Antigravity 2.0** (AGY for short), Google's agentic development environment.
+
+> **What is Antigravity?** Antigravity 2.0 is a standalone Google app where you work with AI agents that can run commands, read and write files, search the web, and use tools. In this lab, you'll use it to build, test, and deploy your agent.
+
+> **Avoid agent confusion!** In this workshop, we'll be _building_ an agent with the help of an _additional_ agent — specifically, the coding agent Antigravity (AGY). It's helpful to keep this distinction in mind as we go.
+
+## Open the Google Cloud console
+
+For this lab, you'll be given access to a temporary GCP environment with ephemeral credentials. Start by registering with your email on the Explore page:
+
+![](images/login-screen.png)
+
+Once you're in, expand **Credentials Reference** to find your temporary username, password, and project ID:
+
+![](images/findcreds1.png)
+
+Noting your credentials, right click **Antigravity in a VM** and select "**Open Link in Incognito Window**":
+
+![](images/incognito1.png)
+
+When you see the pop-up about seeing text and images copied to the clip board, Select "Accept." This will allow you to copy and paste prompts from these instructions into Antigravity.
+
+![](images/ag-allow.png)
+
+
+> **Note:** DO NOT click the X button in the upper right corner.  If you do, You will need to: Open the terminal using Application launcher > System > Konsole and paste following command `/opt/venv/bin/python3 /config/automata/bin/ag_autologin.py --force` If you are in this situation and aren't familiar with how to do this, raise your hand to ask a TA for assistance!
+
+Click on **Google Cloud Console** button to open the GCP console.
+
+![](images/gcp-console.png)
+
+
+Antigravity 2.0 is already open and waiting. **Make sure you start with a new conversation before continuing:**
+
+![](images/agy20hello.png)
+
+## Install the lab's skills and MCPs
+
+Before we start building, we'll set up a starter repo from GitHub that contains everything this lab needs: pre-written **skills**, **MCP** server configuration, and setup instructions for Antigravity.
+
+In the Antigravity chat, tell it to download and set up the repo:
+
+```text
+Download and setup https://github.com/cszhu/build-with-gemini
+```
+![](images/download_github_skills.png)
+
+Antigravity may ask permission before it runs `git clone`. Allow it — choosing an "always allow" option saves you from re-approving `git` commands later:
+
+
+![](images/allow_github_clone.png)
+
+> **What did I just install?** The repo ships an `.agents/` folder that configures Antigravity for this lab. It contains **skills** (bundles of instructions that teach the agent to do a specific task well — they load automatically when relevant, so you get expert behavior without spelling out every step), **MCP** server config (Model Context Protocol — the standard way to plug external tools and data sources, like Google's official docs or a database, into the agent), and setup instructions that tell Antigravity how to install it all and configure your credentials automatically.
+
+When it's done, Antigravity will report the skills and MCP configuration it installed. You can click any file it mentions — like `.agents/mcp_config.json` — to inspect it:
+
+![](images/click_to_view_file.png)
+
+You should end up with several skills specific to this lab, plus two MCP servers:
+
+- **[Developer Knowledge MCP](https://codelabs.developers.google.com/developer-knowledge-mcp-antigravity)** — gives AGY **grounded, current knowledge of Google's official docs** (Google Cloud, Firebase, ADK, and the Agent Platform products you'll use later) instead of guessing commands, which keeps the later modules out of trial-and-error spirals.
+- **[Firebase MCP](https://firebase.google.com/docs/ai-assistance/mcp-server)** — lets AGY work directly with Firebase services like Firestore, which you'll use for persistent storage.
+
+Your setup is complete — let's start building! 🎊
+
+# Build Your First Agent
+
+Later in this lab, you'll design your own bespoke agentic application. But for now, let's build and test a basic agent together. Tell AGY to build a basic agent and run it locally.
+
+```
+Use agents-cli to build a simple agent I can test and run it locally.
+```
+
+When it's done, AGY should produce something like:
+
+![Antigravity scaffolding your first agent — the agents-cli output showing the agent has been created](images/scaffold.png)
+
+Behind the scenes, `agents-cli` scaffolds a complete ADK project for you: a Python agent definition, its configuration, and the local run/playground setup — all the boilerplate you'd otherwise write by hand — so you can go straight to shaping your agent's behavior.
+
+We can then tell AGY to test our agent from the command line:
+
+```
+Test my agent with the message, "What's the weather in New York?"
+```
+
+We can find the logic for our agent in the file `app/agent.py`:
+![](images/cloud-shell-editor.png)
+
+> Tip: If you navigate away from your terminal and AGY exits, you can always access past sessions by opening AGY again and running `/resume`.
+
+## The Playground
+
+We can also test our agent in the **Playground** — a local, browser-based chat interface. Beyond just chatting, it gives us visibility into how our agent actually works: we can inspect **sessions**, step through the **traces** of each turn, and debug the tool calls and responses behind every answer. Tell AGY to:
+
+```
+Launch agent playground for me.
+```
+
+AGY launches the Playground in the background and reports the local URL it's running on — usually `http://localhost:8080`:
+
+![](images/launch-agent-playground.png)
+
+To open it, use the browser inside your remote desktop. Click the **Chrome** icon in the desktop's taskbar:
+
+![](images/open-chrome.png)
+
+Then paste the Playground URL (`http://localhost:8080`) into Chrome's address bar and press Enter. You'll land on the ADK Dev UI, where you can chat with your agent:
+
+![](images/playground-in-chrome-localhost.png)
+
+Here you can chat with our agent from a UI. On the left hand side of the screen, we can see what tools our agent has access to. Depending on how you told AGY to create an agent, your agent may have some basic tools (in this case, `get_weather`). These are blocks of deterministic, functional code your agent can call to complete tasks. We'll add more later.
+
+![](images/playground-simple.png)
+
+In the `Traces` tab, we can see the exact sequence of actions our agent took before producing a reply:
+![](images/playground-trace.png)
+
+On the top bar of the screen, we can view our existing sessions and create new ones. 
+![](images/playground-session.png)
+
+**Sessions** consist of the log of messages in a current conversation, as well as a scratchpad of temporary state which can view in the state tab:
+![](images/playground-state.png)
+
+## Deploy to Agent Platform
+
+Deploying our agent to Google Cloud is as simple as telling Antigravity to deploy our agent to Agent Platform:
+
+```
+Deploy my agent to agent platform.
+```
+
+![](images/agent-deploy.png)
+
+This could take a minute. When your agent is finally deployed, you'll be able to view it in Agent Platform:
+
+![](images/view-deployment-1.png)
+![](images/view-deployment-2.png)
+![](images/view-deployment-3.png)
+
+Clicking in, we can see the extended tool suite available for monitoring our agent in production:
+![](images/view-deployment-4.png)
+
+**From here on, test locally.** Until the **Redeploy your finished agent** step, you'll build and test everything locally in the Playground, so you don't need to redeploy after each change. Paste this into AGY once so it doesn't redeploy on its own:
+
+```
+For the rest of this lab, don't redeploy my agent to Agent Platform or my frontend to Cloud Run unless I explicitly ask. After each change, I'll test locally.
+```
+
+
+# Design Your App
+
+So far we've built and deployed an extremely simple agent--basically, a chatbot. In this next section, we'll evolve **that same agent** into an application of your own design, augmenting it with capabilities like:
+- Calling tools (i.e. running code, calling an API, interacting with a database)
+- Conversation Memory (for storing information about a user between sessions)
+- Database/blob storage access for external application data (i.e. users, product inventory, images)
+- The ability to generate images
+- A snazzy frontend
+
+Now's a good spot to pause and decide what kind of agentic application you'd like to build. It doesn't have to be complicated — a good workshop project is one narrow task with a bit of data behind it. For example:
+
+- A **recipe assistant** that suggests meals from ingredients you have on hand and saves your favorites.
+- A **book concierge** that recommends titles, tracks your reading list, and generates cover art.
+- A **workout coach** that builds a plan, logs your sessions, and charts your progress.
+- A **travel planner** that assembles an itinerary and illustrates each destination.
+- A **plant-care helper** that tracks your plants, reminds you when to water, and diagnoses problems from a photo.
+
+Notice these all share the same shape you'll build here: a conversation, some stored data, a tool or two, and generated media. Whatever you pick, it'll use those same ingredients.
+
+Once you have a basic idea (or if you need help coming up with one), ask AGY for help designing your agentic application.
+This will invoke the `pick-your-agent-project` skill. In AGY, describe whatever you'd like to build, or swap in your own idea:
+
+```
+Help me design my agentic application. I need help brainstorming what specific agent to build.
+```
+
+When you're done, AGY will output a `project_brief.md` file for your review. Edit it yourself or with AGY until you have something you like:
+![](images/designbrief.png)
+
+Our agent will use this for reference as we continue development.
+
+## Rename your agent
+
+Now that you have a brief, rename your existing agent project to match the app you're building:
+
+```
+Use the newly created project_brief.md to rename my existing agent project to match it: rename the project folder and update the name in agents-cli-manifest.yaml and pyproject.toml. Keep the code in app/ unchanged, and don't deploy or change any agent logic yet.
+```
+
+# Add Persistent Storage
+
+Your app also needs somewhere to keep its actual data — the things it looks up and writes to, like a product catalog, a booking, an inventory count, or generated images. For that, you'll want dedicated persistent storage.
+
+Depending on your application, you may require an external data store, like:
+
+- **Structured data** (inventory, orders, user records) → a database like **Firestore** (serverless, simple).
+- **Raw files/blobs** (bulk images, static assets) → **Cloud Storage (GCS)**.
+
+Let's start by implementing structured data in Firestore. Antigravity is already equipped with the [Firebase MCP](https://firebase.google.com/docs/ai-assistance/mcp-server) (pre-configured back in **Set Up Your Environment**), so it can work with the Firestore API directly.
+
+Ask AGY to give your agent a Firestore backend. Describe a collection that fits whatever you're building. AGY can look at your project_brief.md and pick sensible fields. Adapt this prompt to your own domain:
+
+```
+Give my agent a Firestore backend: a collection that fits my app (look at my project_brief.md) with a few sensible fields, function tools to read and write it, and a few seeded items. Important: hardcode my project ID as a string for the Firestore client and the seed script (find it with `gcloud config get-value project`). Don't read it from `google.auth.default()` or `GOOGLE_CLOUD_PROJECT`; on Agent Platform those return the project number, which breaks Firestore after you deploy.
+```
+
+For example, a store/marketplace agent might use an "inventory" collection with name, description, price, and stock; a travel agent might use a "destinations" collection; a recipe agent a "recipes" collection. 
+
+In the Playground, we can verify this worked by asking the agent something it can only answer by querying the database — adapt it to your domain (for a store: *"What items do you have in stock?"*; for a travel agent: *"What destinations do you know about?"*).
+
+You can watch the data live in your Firestore database [here](https://console.cloud.google.com/firestore/databases/-default-). A nice property of Firestore is that it's **real-time**: as your agent writes (say, an action that updates a record), the document updates instantly in the browser. What's more, you can edit entries in the browser and see them reflected immediately in the agent.
+
+![The Firestore data viewer in the Firebase console shows your seeded collection.](images/firestore.png)
+
+## Store files in Cloud Storage
+
+Firestore is great for structured records, but for raw files — images, audio, video — you'll want **Cloud Storage**. This is handy when your agent generates media that you want to persist and serve publicly, for example so your frontend can embed it as an image.
+
+Ask AGY to create a bucket. Adapt the name to your app:
+
+```
+Create a Cloud Storage bucket for this project. Give it a name that fits my app (look at my project_brief.md; add a short random suffix if the name is taken), and set the permissions so objects can be viewed publicly (i.e. embedded in a web page as images).
+```
+
+To confirm your bucket was created, find it here: [https://console.cloud.google.com/storage](https://console.cloud.google.com/storage).
+
+In the image-generation step below, your agent uploads each generated image to this bucket and gets back a public URL. A public URL is a plain `https` link that any browser can load, so the image can be displayed anywhere your agent's responses show up — including the rich UI cards and custom frontend you'll build later in this lab.
+
+# Add Tools
+
+Right now, your agent can only talk. Tools are functions that your agent can use to actually do things and execute. Some tool examples are: looking up data from a database, taking an action (like sending an email), creating something. This is when your agent stops just being a chatbot and starts actually doing things.
+
+Every agent is different, so start by asking your coding AI assistant for tools that fit the agent you've decided to build:
+
+```bash
+Look at my project_brief.md and the agent I'm building. Suggest 2-3 tools it could call to take real action or fetch real data, then recommend the simplest one to implement first.
+```
+After discussing and planning with your agent, pick one to implement. 
+
+```bash
+Implement the tool we just discussed as a function tool and add it to my agent. Keep the implementation minimal.
+```
+
+Test it in the agent playground or debug screen. Ask it to do something that the tool is able to do, and the agent should be able to call the tool. You should be able to confirm this trace in the logs. 
+
+# Call External APIs
+
+The tool you just added ran your own code. But a tool can also reach out to the
+wider web and pull in live data from someone else's service. That's the
+difference between an agent that *mocks* data (invents a plausible-looking answer
+like "here's a sample weather report") and one that returns the real thing. If
+your app needs facts you don't have (the weather, a plant's care instructions, a
+location on a map, an exchange rate), there's probably an API for it, and wiring
+it into a tool is often a single HTTP call.
+
+For example, if you're building a gardening app,
+[Perenual](https://perenual.com/docs/api) has 10,000+ plant species (watering,
+sunlight, hardiness zones) behind a free API key.
+
+Two kinds of API you'll run into:
+
+- **Free, no-key APIs.** Call them straight from a tool with a plain HTTP
+  request, no signup. Great for prototyping.
+- **Key-required APIs.** You register (usually free for low volume), get an API
+  key, and send it with each request.
+
+## Where to find free APIs
+
+You don't have to know an API exists already. A couple of directories are worth
+browsing:
+
+- **[public-apis](https://github.com/public-apis/public-apis)** (~390k GitHub
+  stars). ~50 categories in one big table, with an `Auth` column (`No` means no
+  key needed).
+- **[APIsList](https://apislist.com/)**. Hand-checked, with filters for free,
+  no-key, and open-source APIs, plus a live/broken status on each.
+
+Some need no signup at all. For example,
+`curl "https://api.open-meteo.com/v1/forecast?latitude=40.71&longitude=-74.00&current_weather=true"`
+returns live weather, and `curl "https://api.frankfurter.dev/v1/latest?base=USD"`
+returns exchange rates.
+
+Let AGY do the searching and wiring. It can look at your project, pick an API
+that fits, and build the tool that calls it:
+
+```
+Look at my project_brief.md. Find a free public API that fits my app's domain
+(browse the public-apis directory at https://github.com/public-apis/public-apis),
+then add a function tool that calls it and returns real data. Keep the
+implementation minimal, and if the API needs a key, read it from an environment
+variable rather than hardcoding it.
+```
+
+Test it in the Playground by asking something that can only be answered from the
+live API. In the trace you'll see the tool fire, the HTTP call go out, and the
+agent answer from real data instead of making it up.
+
+## Example: Google Maps
+
+Location features like "find coffee shops near me," "how far is it," and "what's
+the address of this place" are a natural fit for **Google Maps Platform**, and a
+good example of a key-required API. Agents like to *mock* this ("the nearest cafe
+is 0.3 miles away"), so calling the real API is a genuine upgrade.
+
+Maps needs an API key, and the project needs **billing enabled** first. Without
+billing, requests are throttled to about one a day; with it, each API has a
+monthly free tier before it starts charging. The APIs you're most likely to want
+are **[Geocoding](https://developers.google.com/maps/documentation/geocoding)**
+for turning an address into coordinates,
+**[Routes](https://developers.google.com/maps/documentation/routes)** for
+distances and travel times, and
+**[Places (New)](https://developers.google.com/maps/documentation/places/web-service/overview)**
+for searching real places.
+
+To get a key, in the [Cloud Console](https://console.cloud.google.com/):
+
+1. Enable the APIs you need, for example
+   [Geocoding API](https://console.cloud.google.com/apis/library/geocoding-backend.googleapis.com)
+   and [Places API (New)](https://console.cloud.google.com/apis/library/places.googleapis.com).
+   (Or let AGY enable them for you; see the prompt below.)
+2. On the [Credentials](https://console.cloud.google.com/apis/credentials) page,
+   click **Create credentials → API key**.
+3. Restrict the key to those APIs. For a backend, use an IP address restriction
+   rather than HTTP referrers.
+4. Copy the key. You'll hand it to AGY in the next step so it can wire it in as
+   the `GOOGLE_MAPS_API_KEY` environment variable. Keep it out of your source
+   files; the `publish-to-github` skill flags a hardcoded key before it reaches
+   GitHub.
+
+Then have AGY enable the APIs, store your key, and build the tool. Paste your key
+in place of `PASTE_KEY_HERE`:
+
+```
+First, enable the Geocoding and Places (New) APIs on my project. Here's my Maps
+API key: PASTE_KEY_HERE. Save it as GOOGLE_MAPS_API_KEY in my local .env; don't
+hardcode it in a source file. Then add a tool that uses the
+Geocoding API to turn an address into coordinates, and one that uses the Places
+API (New) to find nearby places of a given type. Call the REST endpoints
+directly and return the key fields (name, address, location). Use the Developer
+Knowledge MCP to confirm the exact endpoints and required headers.
+```
+
+Test it with something location-based ("Find parks near Seattle") and watch the
+tool hit the live Maps endpoint in the trace.
+
+> **In the lab environment:** enabling Maps needs billing on the project. If your
+> temporary lab project can't, use a free no-key API from above for now and come
+> back to Maps on your own Google Cloud project later (new accounts get a $300
+> free trial credit that covers it). The pattern is the same for any key-based
+> API: enable it, get a key, store it in an env var, call it from a tool.
+
+# Generate Images
+Tools can also give your agent the power of Google's generative AI models. A great one to reach for is image generation with `gemini-3.1-flash-lite-image` (Nano Banana 2 Lite), Google's fastest image model, which turns a short text prompt into an image so your agent can create visuals on demand. It runs in the `global` region. You can read about it here: https://docs.cloud.google.com/gemini-enterprise-agent-platform/models/gemini/3-1-flash-lite-image
+
+```
+Add a tool that generates an image for an item in my agent's domain (look at my project_brief.md) using the gemini-3.1-flash-lite-image model in the global region. Do two things with the generated image: (1) save it with tool_context.save_artifact so it shows up in the Playground's Artifacts panel, and (2) upload the same image bytes to the public Cloud Storage bucket I created earlier and return its public https URL (https://storage.googleapis.com/<bucket>/<object>) from the tool. Hardcode the bucket name as a string, the same way we hardcoded the Firestore project. Do not write the image to a local file and return a path. Use the Developer Knowledge MCP to confirm the API if you're unsure.
+```
+
+The tool does two things because each output has a different use. The saved artifact shows in the Playground's Artifacts panel, which is a quick way to see the image while you develop. The public URL is what you use later: your agent can drop it into the rich UI cards you'll add later in this lab to show the picture, and your frontend can load it. The Artifacts panel only works inside the Playground, so the public URL is what makes the image visible elsewhere.
+
+Now ask your agent to generate an image for one of the items in your domain. You should get back a real image, which appears in the Artifacts panel.
+![](images/image-generation-food.png)
+
+# Run Code in a Sandbox
+
+Some agents need to execute code, whether that's for quick API calls, data analysis, or just doing math. Agent Platform offers code execution in an isolated sandbox, so your agent is able to code safely. Since the state persists across sessions and it doesn't touch your host, it is a very safe way to run model-generated code, even in enterprise settings.
+
+Prereqs: the Agent Platform API enabled. When you run locally, the sandbox uses your own credentials.
+
+```bash
+Add Agent Platform code execution to my agent using AgentEngineSandboxCodeExecutor so it can safely run Python in a sandbox. If I don't already have a sandbox, create one from the Agent Engine in my deployment_metadata.json.
+```
+
+Test it by asking a question that requires real computation or analysis, like fizzbuzz, and confirm the agent runs code in the sandbox and answers from the result.
+
+Of course, you are able to update your tool instructions from the last section to use the sandbox as well. For folks who are building agents for things like auto-trading or coding, this is a super useful feature to incorporate into your agent.
+
+# Add Memory
+
+While **sessions** store information about a current conversation, sometimes we want to remember facts _between_ sessions. Example: if a customer tells a shopping agent he hates the color red, that fact should be present across _all_ future sessions.
+
+We can enable this cross-session remembering with Agent Platform's [Memory Bank](https://docs.cloud.google.com/gemini-enterprise-agent-platform/scale/memory-bank). Every time the user sends the agent a message, Memory Bank analyzes the conversation and automatically extracts and remembers factual snippets that might be useful to future conversations. Unlike Firestore, which stores your app's data, Memory Bank remembers facts about the user.
+
+> **Note:** Memory Bank is a managed service on Agent Platform, but you don't need to redeploy to use it. The Agent Engine you created in your first deploy also serves as your Memory Bank, and your local Playground can connect to it directly. The standard `agents-cli playground` command can't connect to Memory Bank, so AGY starts the Playground with `adk web` instead. It still opens at `http://localhost:8080`.
+
+Let's tell AGY to set up memory using its skill:
+
+```
+Use the memory-bank-setup skill to add memory to my agent. Reuse the Agent Engine from my earlier deployment as the Memory Bank (its ID is the last part of remote_agent_runtime_id in deployment_metadata.json). Also set the memory service in the app code so it's used when I redeploy later, but don't redeploy now. Then restart my local playground with `uv run adk web . --port 8080 --reload_agents --memory_service_uri=agentengine://<ID>` instead of `agents-cli playground`, and use that same command whenever I ask you to launch or restart the playground.
+```
+
+Depending on your application, you can be more specific about what to remember:
+
+```
+Configure memory so that all user allergies are remembered.
+```
+
+To try it out, tell your agent a durable fact about yourself in the Playground (for example, a preference), then start a **new session** and ask something that depends on it. Memory Bank extracts memories in the background after each turn. You can see the stored memories in the Agent Platform UI [here](https://console.cloud.google.com/agent-platform/memory-bank):
+
+![A memory stored in the Agent Platform Memory Bank UI](images/apothecary-memory.png)
+
+If you don't see any memories, ask AGY to confirm the Playground was started with `--memory_service_uri`.
+
+# Enrich Responses with A2UI
+
+So far your agent replies in plain text. A2UI lets it reply with real UI instead: cards and tables. Your agent writes a small description of the UI as JSON, and a renderer turns that JSON into components on screen. A2UI is open source and works with any agent built with ADK. (In the ADK dev UI the cards are **display-only** — buttons and forms show but don't do anything; keep your UI to cards and tables built from rows and columns.)
+
+There are two pieces to set up, and you need both, or you will just see raw JSON:
+
+1. A system prompt that teaches the model to output valid A2UI JSON. The a2ui-agent-sdk builds this for you with `A2uiSchemaManager`.
+2. A small callback (`a2ui_utils.py`) that wraps the model's JSON in the format the ADK dev UI's built-in renderer expects. You add it to your agent as an `after_model_callback`.
+
+Ask AGY to set up both. This uses the `enable-a2ui` skill, which ships the callback file for you:
+
+```bash
+Use the enable-a2ui skill to add A2UI to my agent: build the system prompt with A2uiSchemaManager (version 0.8) and the Basic Catalog, copy in a2ui_utils.py, and wire it up as an after_model_callback.
+```
+
+One thing to watch: the callback only recognizes v0.8 messages, so if the schema manager emits v0.9 instead, the callback never fires and you're back to raw JSON.
+
+## Validate A2UI locally before redeploying
+
+Test it in the same Playground you have been using. The Playground is really the ADK dev UI (`agents-cli playground` runs `adk web` for you), and it comes with a built-in A2UI renderer. It only renders A2UI once the callback is in place, so restart the Playground to pick up your changes:
+
+```bash
+Restart the agent playground so it picks up my latest changes.
+```
+
+This restart is **local only**: it reloads the Playground process on your machine, not the agent you already deployed to Agent Platform. Redeploying takes several minutes, so don't do it after every small change — verify A2UI here first. You'll push everything you've built (storage, tools, media, sandbox, memory, and A2UI) to the deployed agent in one shot later, in the **Redeploy your finished agent** step.
+
+Start a new session, then ask for something that fits a card or table. For a store agent, "Show me what's in stock" might render a table, and "Tell me about this item" might render a card. Adapt the question to whatever your agent knows about. You should see real UI instead of JSON.
+![](images/a2ui-in-adk-playground.png)
+
+A card can also show an image. Add an `Image` component and set its URL to the public URL your image tool returns, and the picture appears inside the card instead of only in the Artifacts panel. Ask your agent to generate an image for an item and show it, and you should get a card with the picture in it. The URL must be a public `https` link. A bare artifact filename cannot be loaded by the renderer and shows as a broken image.
+
+One important setting: **turn Token Streaming OFF** in the Playground (the toggle in its settings). With streaming on, the dev UI shows the raw streamed JSON and never swaps in the card. If you still see raw JSON after that, check that the callback is wired up and that you are on version 0.8, then hard-refresh and start a new session. (If the Playground in your environment still won't render it, you can run the dev UI directly with `uv run adk web --port 8080 --allow_origins "*" --reload_agents`, plus the `--memory_service_uri` flag from the Add Memory step.)
+
+# Build a Frontend
+
+Up to now you've tested everything in the ADK playground, and that's been your agent's "face" while you built out storage, tools, media, and A2UI. Now, let's give your agent a shareable web face and ship it to the cloud.
+
+## Redeploy your finished agent
+
+Your agent has grown a lot since you first deployed it: it now has storage, tools, media generation, a sandbox, memory, and A2UI, none of which are in that original deployment. Before wiring up a frontend, push the latest version to Agent Platform so the frontend talks to the fully-featured agent:
+
+```bash
+Redeploy my agent to Agent Platform. If my agent reads any API keys from environment variables (like GOOGLE_MAPS_API_KEY), pass them to the deployment with --update-env-vars.
+```
+
+Do this next if your agent uses Firestore or Cloud Storage. The deployed agent runs as its own service account, which has no access to your data by default. It worked in the Playground because you ran as yourself. On the deployed agent a Firestore query comes back empty, and an image upload to Cloud Storage fails and no image appears. Grant the roles the deployed agent needs:
+
+```bash
+Grant my deployed agent's service account the roles it needs: roles/datastore.user for Firestore, and roles/storage.objectAdmin on my image bucket if it generates images.
+```
+
+This uses the `troubleshoot-lab-setup` skill to grant those roles to your agent's runtime service account.
+
+Grab the resource name from the fresh `deployment_metadata.json`. You'll point the frontend at it in a moment.
+
+## Build the frontend
+
+We don't hand you a pre-built frontend. Instead, ask AGY to build a minimal one for you. This invokes the `build-agent-frontend` skill, which copies a small FastAPI proxy and chat UI into a `frontend/` folder. The browser only ever talks to the proxy (same origin, no CORS), and the proxy authenticates to your deployed agent with Application Default Credentials.
+
+The chat shows your agent's text replies and renders its A2UI cards. The same cards you saw in the ADK dev UI now show up in your own web app, including any generated images (the card's `Image` points at the public URL from your Cloud Storage bucket). The template ships a small built-in renderer, so it works whether or not your agent uses A2UI (anything it can't render falls back to plain text).
+
+```bash
+Using the build-agent-frontend skill, copy its minimal FastAPI proxy and chat UI template into ./frontend and wire it to my deployed agent using AGENT_ENGINE_RESOURCE_NAME and AGENT_DIRECTORY (my agent_directory from agents-cli-manifest.yaml). Keep it a plain chat UI. Do not build a React app or pull in a large sample frontend.
+```
+
+(If your project already has a web frontend you'd rather keep, tell AGY to adapt that one to the same proxy pattern instead of creating a new one.)
+
+## Test locally
+
+Before deploying the frontend, confirm that your code can reach your agent that is currently deployed on Agent Platform. Running locally means the frontend server runs on your machine instead of Cloud Run, but it talks to the same deployed agent. This catches wiring issues before you ship to Cloud Run.
+
+Ask AGY to install the frontend and start it locally, pointed at your deployed agent:
+
+```bash
+Run my frontend locally from the frontend/ folder: install its dependencies, set AGENT_ENGINE_RESOURCE_NAME to the resource name in deployment_metadata.json and AGENT_DIRECTORY to my agent_directory from agents-cli-manifest.yaml, then start the server on http://localhost:8080.
+```
+
+If you would rather run it yourself, from the `frontend/` folder:
+
+```bash
+pip install -r requirements.txt
+export AGENT_ENGINE_RESOURCE_NAME="<paste the resource name from deployment_metadata.json>"
+export AGENT_DIRECTORY="app"
+python main.py
+```
+
+Then test it in your browser:
+
+1. Open http://localhost:8080 and you should see your chat UI.
+![](images/frontend-skeleton-demo.png)
+2. Send a message and wait for a reply. Then, in the same chat, ask "What did I just ask?" to confirm the session is wired up correctly. If it can't remember, the frontend is not reaching your deployed agent, so recheck the resource name from the earlier step.
+
+## Deploy to Cloud Run
+Finally, ship the frontend so anyone can use it.
+
+Note that the frontend that we are shipping deploys differently from the agent. You used agents-cli to deploy the agent to Agent Platform, the frontend is a separate custom web app, so you need to ship that to Cloud Run with gcloud. Essentially, the agent lives in Agent Platform while the frontend lives in Cloud Run and talks to the agent. This is the recommended pattern for a custom UI.
+
+The Cloud Run service runs as a different service identity than you did locally, so its service account needs roles/aiplatform.user or /chat will error out.
+
+```bash
+Deploy the frontend to Cloud Run pointing at my AGENT_ENGINE_RESOURCE_NAME and AGENT_DIRECTORY, and grant the Cloud Run service account roles/aiplatform.user so it can reach the agent.
+```
+
+Or run it directly:
+
+```bash
+gcloud run deploy <your-frontend-name> \
+  --source . \
+  --region <your-region> \
+  --allow-unauthenticated \
+  --set-env-vars="AGENT_ENGINE_RESOURCE_NAME=$AGENT_ENGINE_RESOURCE_NAME,AGENT_DIRECTORY=$AGENT_DIRECTORY"
+```
+
+Open the Cloud Run URL and chat with your deployed agent. That's the full loop: agent on Agent Platform, frontend on Cloud Run, talking to each other.
+
+# Customize Your Frontend
+
+Your whole UI lives in one file, `frontend/static/index.html`: a chat page with a title, a header, and an accent color. Ask AGY to restyle it. Check each change at `http://localhost:8080` (refresh the page), and when you're happy with it, ask AGY once to redeploy the frontend to Cloud Run. A few things to try:
+
+```
+Rebrand my frontend: set the title and header to my app's name and change the accent color.
+```
+
+```
+Add a row of 3 clickable example prompts above the input, tailored to my agent (look at my project_brief.md).
+```
+
+```
+Create a nice dialogue layout for my app that matches my theme.
+```
+
+```
+Suggest some UI improvements we can make to the frontend.
+```
+
+![](images/updated-layout-frontend.png)
+
+# Stretch Goals
+
+You've built the full loop. To take it further, pick from the stretch menu in your project_brief.md. A few ideas:
+
+- Video previews with Omni: generate a short video clip instead of a still image.
+- Check out Cloud Trace: your deployed agent already exports traces, so you can see the full execution flow — every LLM call and tool call — for each request.
+- Keep customizing the frontend to match your brand.
+
+[Omni](https://ai.google.dev/gemini-api/docs/omni) (`gemini-omni-flash-preview`) is Google's video model: it generates video from text or a reference image, and you can keep editing the result with follow-up prompts instead of starting over from scratch. It also reasons about physics and real-world context, so motion in the clip looks physically plausible instead of uncanny.
+
+To try video generation with Omni:
+
+```
+Add a tool that generates a short video for an item in my agent's domain (look at my project_brief.md) using Google's Omni model (gemini-omni-flash-preview) in the global region. Do two things with the generated video: (1) save it with tool_context.save_artifact so it shows up in the Playground's Artifacts panel, and (2) upload the same video bytes to the public Cloud Storage bucket I created earlier and return its public https URL (https://storage.googleapis.com/<bucket>/<object>) from the tool. Hardcode the bucket name as a string, the same way we hardcoded the Firestore project. Do not write the video to a local file and return a path. Use the Developer Knowledge MCP to confirm the API if you're unsure.
+```
+
+# Share What You Built
+
+You've gone from an empty folder to a deployed, agent-first application. The last step is the fun one: capture it and show it off. Your repo ships a **`record-demo`** skill that films your agent in action and produces a polished, branded video clip — perfect for a tweet, a Slack message, or the top of a README.
+
+## Record a demo clip
+
+The `record-demo` skill drives your chat UI in a headless browser: it opens the page, types real prompts, waits for each reply, and saves a short **`.webm`** with a "Gemini World Tour" frame around it. It works against either face of your agent — your custom frontend (`localhost:8080`) or the Playground.
+
+First, make sure the UI you want to film is running (your frontend from the last section, or the Playground). Then tell AGY what to show off — pick 2–3 prompts that exercise your agent's best features (a tool call, a Firestore lookup, a generated image, an A2UI card):
+
+```
+Record a demo video of my agent. Show it doing the thing my app does best, then ask a second, richer prompt that shows off a tool call, a database lookup, or a generated image.
+```
+
+For example, a store agent might use: *"Record a demo of my agent. Ask it what's in stock, then ask it to generate a picture of the first item."* A great clip is short and snappy — **2–3 turns, roughly 20–40 seconds**.
+
+> **Add a soundtrack (optional).** The recorder can score your clip with AI-generated instrumental music using Google's Lyria model, matched to the video's length. Just describe the vibe:
+> ```
+> Record a demo of my agent and add some upbeat lo-fi background music.
+> ```
+
+If you'd rather run it yourself, call the recorder directly from your project root (bump `--wait` to `30000`+ for turns that generate an image or video):
+
+```bash
+node .agents/skills/record-demo/record-agent.js \
+  -q "First demo prompt" \
+  -q "Second demo prompt" \
+  -o agent_demo.webm
+```
+
+On success it prints `SUCCESS: Recording saved to <path>`, leaving a branded `.webm` in your project — ready to share.
+
+## Turn it into a shareable README
+
+A demo is even better with a landing page. Ask AGY to generate a README that tells the story of your app and shows the clip you just recorded — as a **GIF**, which is the no-fuss way to get a demo playing in a README:
+
+```
+Generate a README.md for my project. Describe what my agent actually does based on the code in this repo — read app/ and agents-cli-manifest.yaml to see which tools and Google Cloud services are really wired up (Memory Bank, Firestore, Cloud Storage, image generation, A2UI) and list ONLY those. Don't claim a capability the code doesn't implement; if something in my project_brief.md was planned but not finished, leave it out or mark it clearly as "planned, not yet implemented." Do NOT put any live links to localhost (like http://localhost:8080) or to ephemeral Cloud URLs (Cloud Run / Agent Engine endpoints from this lab) in the README — they die when this workstation is torn down and will 404 for anyone reading it later. If you need to show how to run it, write it as setup/run instructions (the commands to start it locally), not as a clickable link. Then convert the demo I recorded with record-demo (the .webm file) to an optimized, looping GIF and embed it near the top with a relative path so it plays inline — use only that real recording; if there isn't one, leave the demo out rather than generating or drawing a placeholder.
+```
+
+Why a GIF? Committed alongside your code and referenced with a plain relative path (`![demo](demo.gif)`), it renders and loops automatically on GitHub — no uploads, no special links. Keep the original `.webm` as your high-quality **social asset**: X, LinkedIn, and Slack all play an uploaded video natively.
+
+> **Prefer a real video player in the README?** GitHub only renders an inline player for videos uploaded through its web editor (`.webm` committed to the repo and linked by path stays a download link). If you want the player rather than a GIF, drag the `.webm` into the README on github.com and it inserts a working embed.
+
+Now your repo has a proper front door: a clear description, a feature list, and a looping demo of your agent in action — the perfect thing to link when someone asks *"what did you build?"*
+
+# Publish to GitHub
+
+**This section is optional.** Do it only if you want to keep your code so you can work on it later, or share it. If you're done, feel free to skip it.
+
+Everything you've built so far lives on this remote desktop, and the desktop is temporary. When the lab ends, it goes away, and your code with it. So the last step is to push your project to **your own personal GitHub** so you keep it, can share it, and can submit it for **swag** (a crewneck) and a shot at the **Build with Gemini** project gallery.
+
+This uses the `publish-to-github` skill, which creates a repo on *your* GitHub account and pushes your project to it. Tell AGY:
+
+```
+Publish my project to GitHub and submit it for swag.
+```
+
+What happens, and where you stay in control:
+
+1. **You sign in to your own GitHub.** AGY runs the GitHub CLI, which prints a **one-time code** and the URL [github.com/login/device](https://github.com/login/device). Open that on *any* device (your laptop or phone), sign in to **your personal GitHub**, and enter the code. This keeps your GitHub identity separate from the lab's Google Cloud credentials.
+
+   > **Note:** sign in with *your own* GitHub account, not the Qwiklabs lab account. The repo lands on your personal profile so it's yours to keep after the lab.
+
+2. **AGY asks before it pushes.** Before creating the repo or pushing anything, AGY confirms the repo name and shows you what it's about to do. **Nothing is pushed to your account without your say-so.** Don't blindly approve; check the repo name and that it's your account first.
+
+   > **Name your repo `buildwithgemini-[YOUR-APP-NAME]`** (for example, `buildwithgemini-recipe-assistant`). AGY proposes this name by default, but if you rename it, keep this format — it's what registration staff look for when you show them your public repo to redeem your crewneck.
+
+3. **Your repo goes public.** The repo is created **public** so it can be featured in the gallery and shared on social. AGY writes a `.gitignore` and scans for secrets before committing, so credentials don't get pushed.
+
+When it's done, AGY prints your new repo's URL and a **pre-filled submission form** with your repo link already filled in. Open it, add the details only you know (your registration name/email, whether you've claimed your GDP badge, and whether you consent to be featured), and submit:
+
+- Submitting the form is how you enter for swag and the project gallery — the form itself lists the current eligibility terms.
+- **Standout projects** get hand-picked by the team and featured (with a link to your repo) in the **Build with Gemini track 3 GitHub gallery**.
+
+# Earn a Skill Badge
+
+Now that you've finished the workshop, you can earn an official **Build with Gemini** Skill Badge for your Google Developer Profile. It's an Intermediate quiz that takes about **30 minutes** and confirms what you learned here.
+
+Claim it today:
+
+[Claim your Build with Gemini Skill Badge](https://developers.google.com/profile/badges/events/community/build-with-gemini/track3-software-developer/award?utm_source=events-with-google&utm_medium=et&utm_campaign=FY26-Q3-BuildwithGemini&utm_content=track3_appbuilders&utm_term=-)
+
+Or scan the QR code to open it on your phone:
+
+![Scan to earn your Build with Gemini Skill Badge](images/skill-badge-qr.png)
+
+Congratulations! You've designed, built, equipped, evaluated, deployed, shared, *and* published a complete agentic application.
+
+</script>
+<script>
+  const MD_PATH = "../Gemini World 3 QwikLab 2.0.md";
+
+  // Google Docs export escapes punctuation with backslashes (\`, \[, \!, \<, ...).
+  // Strip those so markdown renders cleanly.
+  function unescapeGdocs(src) {
+    return src.replace(/\\([\\`*_{}\[\]()#+\-.!<>|~"'@$%^&=:;,/])/g, "$1");
+  }
+
+  function slugify(text) {
+    return text.toLowerCase().replace(/<[^>]+>/g, "").replace(/[^\w]+/g, "-").replace(/^-+|-+$/g, "");
+  }
+
+  // Strip markdown links / author mailto tags from a heading for the nav label.
+  function cleanLabel(text) {
+    return text.replace(/\[([^\]]+)\]\([^)]*\)/g, "$1").trim();
+  }
+
+  let lastRaw = null;
+
+  function render(raw) {
+    const cleaned = unescapeGdocs(raw);
+    const html = marked.parse(cleaned, { gfm: true, breaks: false });
+    const content = document.getElementById("content");
+    content.innerHTML = html;
+
+    // Add a clickable copy-to-clipboard button to every code block
+    content.querySelectorAll("pre").forEach(pre => {
+      const code = pre.querySelector("code");
+      if (!code) return;
+      const btn = document.createElement("button");
+      btn.className = "copy-btn";
+      btn.type = "button";
+      btn.textContent = "Copy";
+      btn.setAttribute("aria-label", "Copy code to clipboard");
+      btn.addEventListener("click", async () => {
+        const text = code.innerText;
+        try {
+          await navigator.clipboard.writeText(text);
+        } catch (e) {
+          // Fallback for non-secure contexts / older browsers
+          const ta = document.createElement("textarea");
+          ta.value = text;
+          ta.style.position = "fixed";
+          ta.style.opacity = "0";
+          document.body.appendChild(ta);
+          ta.select();
+          try { document.execCommand("copy"); } catch (_) {}
+          ta.remove();
+        }
+        btn.textContent = "Copied!";
+        btn.classList.add("copied");
+        clearTimeout(btn.__t);
+        btn.__t = setTimeout(() => {
+          btn.textContent = "Copy";
+          btn.classList.remove("copied");
+        }, 1800);
+      });
+      pre.appendChild(btn);
+    });
+
+    // Missing screenshots -> clean "pending" placeholder instead of a broken-image icon
+    content.querySelectorAll("img").forEach(img => {
+      img.addEventListener("error", () => {
+        const d = document.createElement("div");
+        d.className = "img-pending";
+        d.textContent = "📷 screenshot pending: " + (img.getAttribute("alt") || img.getAttribute("src"));
+        img.replaceWith(d);
+      });
+    });
+
+    // Flag placeholder callouts so they stand out from real ones
+    content.querySelectorAll("blockquote").forEach(bq => {
+      const t = bq.textContent || "";
+      if (/Presenter note/i.test(t)) bq.classList.add("ph-presenter");
+      else if (/SCREENSHOT|DEMO/.test(t)) bq.classList.add("ph-image");
+      else if (/TODO:/.test(t)) bq.classList.add("ph-todo");
+    });
+
+    // Build sidebar from H1s; assign ids for anchoring
+    const toc = document.getElementById("toc");
+    toc.innerHTML = "";
+    const heads = content.querySelectorAll("h1");
+    heads.forEach((h, i) => {
+      const id = h.id || slugify(h.textContent) || ("sec-" + i);
+      h.id = id;
+      // Rotate through the same 4 Google colors used in the hero divider (blue/red/yellow/green)
+      const colorClass = "section-color-" + (i % 4);
+      h.classList.add(colorClass);
+      // Flag empty TODO sections visually
+      let label = cleanLabel(h.textContent);
+      const a = document.createElement("a");
+      a.href = "#" + id;
+      a.textContent = label;
+      a.dataset.target = id;
+      a.classList.add(colorClass);
+      if (/todo/i.test(label)) { a.style.color = "#f0a35e"; }
+      toc.appendChild(a);
+    });
+
+    setupScrollSpy();
+  }
+
+  function setupScrollSpy() {
+    const links = [...document.querySelectorAll("#toc a")];
+    const map = links.map(a => ({ a, el: document.getElementById(a.dataset.target) })).filter(x => x.el);
+    function onScroll() {
+      let current = map[0];
+      for (const m of map) {
+        if (m.el.getBoundingClientRect().top <= 120) current = m;
+      }
+      links.forEach(a => a.classList.remove("active"));
+      if (current) current.a.classList.add("active");
+    }
+    window.removeEventListener("scroll", window.__spy || (()=>{}));
+    window.__spy = onScroll;
+    window.addEventListener("scroll", onScroll, { passive: true });
+    onScroll();
+  }
+
+  async function load(initial) {
+    try {
+      const res = await fetch(encodeURI(MD_PATH) + "?t=" + Date.now(), { cache: "no-store" });
+      if (!res.ok) throw new Error("HTTP " + res.status);
+      const raw = await res.text();
+      if (raw !== lastRaw) {
+        const y = window.scrollY;
+        lastRaw = raw;
+        render(raw);
+        if (!initial) window.scrollTo(0, y); // preserve scroll on live reload
+        blinkDot();
+      }
+    } catch (e) {
+      if (initial) {
+        document.getElementById("content").innerHTML =
+          '<div id="status">Could not load the markdown.<br><br><code>' + e.message +
+          '</code><br><br>Make sure the dev server is running from the project root.</div>';
+      }
+    }
+  }
+
+  function blinkDot() {
+    const dot = document.getElementById("dot");
+    dot.style.opacity = "0.2";
+    setTimeout(() => (dot.style.opacity = "1"), 250);
+  }
+
+  // Light/dark theme toggle (persisted; initial value set in the head script)
+  const themeToggle = document.getElementById("theme-toggle");
+  const themeIcon = document.getElementById("theme-icon");
+  function syncThemeIcon() {
+    const isDark = document.documentElement.dataset.theme === "dark";
+    if (themeIcon) themeIcon.textContent = isDark ? "light_mode" : "dark_mode";
+    if (themeToggle) themeToggle.setAttribute("aria-label", isDark ? "Switch to light theme" : "Switch to dark theme");
+  }
+  syncThemeIcon();
+  if (themeToggle) {
+    themeToggle.addEventListener("click", () => {
+      const next = document.documentElement.dataset.theme === "dark" ? "light" : "dark";
+      document.documentElement.dataset.theme = next;
+      localStorage.setItem("theme", next);
+      syncThemeIcon();
+    });
+  }
+
+  // Inline markdown (built/hosted single file) vs. live fetch (local dev)
+  const inlineEl = document.getElementById("md-inline");
+  const inlineMd = inlineEl ? inlineEl.textContent.trim() : "";
+  if (inlineMd) {
+    document.getElementById("footer-status").textContent = "Build with Gemini · Track 3";
+    render(inlineMd);
+  } else {
+    load(true);
+    setInterval(() => load(false), 1500); // live reload: poll every 1.5s
+  }
+</script>
+</body>
+</html>
