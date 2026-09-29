@@ -75,6 +75,11 @@
     font-size: 0.8rem;
     color: var(--text-secondary);
   }
+  .header-actions {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+  }
   .header-badge {
     background: rgba(194, 24, 91, 0.15);
     border: 1px solid rgba(194, 24, 91, 0.35);
@@ -95,6 +100,49 @@
     border-radius: 50%;
     background: #00e676;
     box-shadow: 0 0 8px #00e676;
+  }
+  .btn-reset {
+    background: rgba(255, 255, 255, 0.06);
+    border: 1px solid var(--border);
+    color: var(--text-secondary);
+    padding: 0.35rem 0.75rem;
+    border-radius: 8px;
+    font-size: 0.8rem;
+    font-weight: 500;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 0.35rem;
+    transition: all 0.2s;
+  }
+  .btn-reset:hover {
+    background: rgba(194, 24, 91, 0.2);
+    border-color: var(--accent);
+    color: #fff;
+  }
+  .a2audio-wrapper {
+    background: rgba(255, 255, 255, 0.03);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 0.65rem 0.85rem;
+    margin: 0.5rem 0;
+    display: flex;
+    flex-direction: column;
+    gap: 0.4rem;
+  }
+  .a2audio-label {
+    font-size: 0.8rem;
+    color: var(--gold);
+    display: flex;
+    align-items: center;
+    gap: 0.35rem;
+    font-weight: 600;
+  }
+  audio {
+    width: 100%;
+    height: 36px;
+    outline: none;
+    border-radius: 8px;
   }
   #log {
     flex: 1;
@@ -275,7 +323,13 @@
       <p>Sensual • Modern • Dominican Dance Instructor</p>
     </div>
   </div>
-  <div class="header-badge">Agent Active</div>
+  <div class="header-actions">
+    <button type="button" class="btn-reset" id="resetBtn" title="Start a fresh conversation">
+      <span class="material-symbols-outlined" style="font-size:1rem; color:var(--text-secondary);">restart_alt</span>
+      <span>Reset Session</span>
+    </button>
+    <div class="header-badge">Agent Active</div>
+  </div>
 </header>
 
 <div id="log"></div>
@@ -365,13 +419,25 @@ function buildNode(id, comps, seen) {
     }
     case "Text": {
       const textVal = boundStr(props.text);
-      if (/^https?:\/\/.*\.mp4(\?.*)?$/i.test(textVal.trim())) {
+      const trimmed = textVal.trim();
+      if (/^https?:\/\/.*\.mp4(\?.*)?$/i.test(trimmed)) {
         const v = el("video", "a2video");
-        v.src = textVal.trim();
+        v.src = trimmed;
         v.controls = true;
         v.autoplay = false;
         v.loop = true;
         return v;
+      }
+      if (/^https?:\/\/.*(\.m4a|\.mp3|\.aac|audio-preview)(\?.*)?$/i.test(trimmed)) {
+        const wrap = el("div", "a2audio-wrapper");
+        const lbl = el("div", "a2audio-label", "🎵 Music Audio Preview");
+        const a = el("audio");
+        a.src = trimmed;
+        a.controls = true;
+        a.preload = "none";
+        wrap.appendChild(lbl);
+        wrap.appendChild(a);
+        return wrap;
       }
       const t = el("div", "a2text");
       const hint = String(props.usageHint || "body").toLowerCase();
@@ -453,11 +519,21 @@ function renderReply(b, parts) {
 
   for (const textStr of texts) {
     if (textStr) {
-      if (/^https?:\/\/.*\.mp4(\?.*)?$/i.test(textStr.trim())) {
+      const trimmed = textStr.trim();
+      if (/^https?:\/\/.*\.mp4(\?.*)?$/i.test(trimmed)) {
         const v = el("video", "a2video");
-        v.src = textStr.trim();
+        v.src = trimmed;
         v.controls = true;
         b.appendChild(v);
+      } else if (/^https?:\/\/.*(\.m4a|\.mp3|\.aac|audio-preview)(\?.*)?$/i.test(trimmed)) {
+        const wrap = el("div", "a2audio-wrapper");
+        const lbl = el("div", "a2audio-label", "🎵 Music Audio Preview");
+        const a = el("audio");
+        a.src = trimmed;
+        a.controls = true;
+        wrap.appendChild(lbl);
+        wrap.appendChild(a);
+        b.appendChild(wrap);
       } else {
         b.appendChild(el("div", null, textStr));
       }
@@ -494,6 +570,29 @@ async function sendMessage(text) {
   } catch (e) {
     b.textContent = "Error: " + e.message;
   }
+}
+
+const resetBtn = document.getElementById("resetBtn");
+if (resetBtn) {
+  resetBtn.addEventListener("click", async () => {
+    resetBtn.disabled = true;
+    resetBtn.style.opacity = "0.5";
+    try {
+      await fetch("/reset", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({})
+      });
+      log.innerHTML = "";
+      const b = bubble("agent");
+      b.textContent = "¡Hola! Your session has been reset. What would you like to practice today?";
+    } catch (e) {
+      alert("Failed to reset session: " + e.message);
+    } finally {
+      resetBtn.disabled = false;
+      resetBtn.style.opacity = "1";
+    }
+  });
 }
 
 form.addEventListener("submit", (ev) => {

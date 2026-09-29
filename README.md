@@ -12,6 +12,43 @@ An intelligent, multi-modal dance instructor agent built with the Google Agent D
 
 ---
 
+## 📐 System Architecture
+
+```mermaid
+graph TD
+    classDef client fill:#3b1335,stroke:#c2185b,stroke-width:2px,color:#fff;
+    classDef proxy fill:#1c1124,stroke:#ff80ab,stroke-width:2px,color:#fff;
+    classDef engine fill:#261830,stroke:#d4af37,stroke-width:2px,color:#fff;
+    classDef storage fill:#152238,stroke:#4285f4,stroke-width:2px,color:#fff;
+    classDef ai fill:#20123a,stroke:#ba68c8,stroke-width:2px,color:#fff;
+
+    Dancer([💃 Dancer / Web Browser]):::client -->|HTTPS / Chat & Reset| CloudRun[Cloud Run Frontend Proxy\nFastAPI + A2UI & HTML5 Audio/Video]:::proxy
+    CloudRun -->|A2A Protocol / JSON-RPC| AgentEngine[Agent Platform Reasoning Engine\nADK LlmAgent / gemini-3.6-flash]:::engine
+
+    subgraph GCP_Data ["Google Cloud Data & State"]
+        Firestore[(Cloud Firestore\nDance Moves Catalog)]:::storage
+        MemoryBank[(Vertex AI Memory Bank\nCross-session Dancer Preferences)]:::storage
+        GCS[(Google Cloud Storage\nPublic Media Bucket)]:::storage
+        Sandbox[Agent Engine Code Sandbox\nBeat Grid & Millisecond Calculator]:::storage
+    end
+
+    subgraph Gemini_Models ["Multimodal Vertex AI Models"]
+        FlashLite[Gemini Flash Lite Image\nVisual Posture & Frame Illustrations]:::ai
+        Omni[Gemini Omni Flash Preview\nInteractions API Video Demonstrations]:::ai
+        iTunes[iTunes Search API\nTempo & 30s Audio Previews]:::ai
+    end
+
+    AgentEngine <-->|Read / Save Moves| Firestore
+    AgentEngine <-->|Preload / Commit Memories| MemoryBank
+    AgentEngine -->|Generate Illustrations| FlashLite
+    AgentEngine -->|Synthesize Dance Clips| Omni
+    AgentEngine -->|Upload MP4 & JPG| GCS
+    AgentEngine -->|Execute Math Code| Sandbox
+    AgentEngine -->|Search Music & Audio| iTunes
+```
+
+---
+
 ## 🌟 Key Features & Architecture
 
 BachataFlow Coach integrates real Google Cloud tools and Gemini models:

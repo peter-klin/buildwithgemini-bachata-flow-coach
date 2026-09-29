@@ -470,6 +470,7 @@ instruction = schema_manager.generate_system_prompt(
         "Image at a bare filename, an artifact name, or a non-http(s) path. If you do "
         "not have a public URL, add a short Text line noting the image instead. "
         "If you generated a video, include a Text component with the public https video URL so it can be played. "
+        "If recommending songs from search_bachata_songs, include a Text component with the preview_url so the dancer can listen to the audio preview. "
         "No markdown in text; use the usageHint property ('h1', 'h2', 'body') for "
         "headings and emphasis. "
         "Output ONLY the raw A2UI JSON array — no prose, and never wrap it in "
