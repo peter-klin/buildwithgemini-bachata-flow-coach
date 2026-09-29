@@ -13,6 +13,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+import base64
 import re
 import uuid
 from typing import Any, Dict, List, Optional
@@ -446,8 +447,10 @@ instruction = schema_manager.generate_system_prompt(
         "mentions a song or asks for a practice combo, use analyze_tempo_and_build_routine. When a dancer "
         "asks for a visual demonstration, picture, posture guide, or illustration of a move or frame, "
         "use generate_dance_illustration and present the returned public URL as an embedded image. "
-        "When a dancer asks for a video demonstration, video clip, dynamic movement, or animated footwork, "
-        "use generate_dance_video and return the public video URL so the dancer can watch the video clip. "
+        "IMPORTANT: When a dancer asks for a video demonstration, video clip, dynamic movement, or animated footwork, "
+        "or explicitly says 'video' or 'generate_dance_video', YOU MUST CALL generate_dance_video immediately! "
+        "Do not answer with text alone or default to basic styles when a video is requested. Always call generate_dance_video "
+        "and return the public video URL so the dancer can watch the video clip. "
         "When calculating musical timing, tempos, millisecond beat grids, or complex practice sequences, "
         "you can safely write and execute Python code in your Agent Engine sandbox. "
         "When a dancer describes a new move or wants to save a custom routine, use save_bachata_move to store it."
