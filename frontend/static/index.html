@@ -1,0 +1,512 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>BachataFlow Coach</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700&family=Playfair+Display:ital,wght@0,600;0,700;1,600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --accent: #c2185b;
+    --accent-dark: #880e4f;
+    --accent-light: #fce4ec;
+    --accent-glow: rgba(194, 24, 91, 0.25);
+    --gold: #d4af37;
+    --bg-page: #0f0e13;
+    --bg-surface: #181622;
+    --bg-card: #201d2d;
+    --border: #312b44;
+    --text-primary: #f5f3f7;
+    --text-secondary: #a7a2b5;
+    --text-muted: #736d85;
+  }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0;
+    font-family: "Outfit", system-ui, sans-serif;
+    background: var(--bg-page);
+    color: var(--text-primary);
+    display: flex;
+    flex-direction: column;
+    height: 100vh;
+    overflow: hidden;
+  }
+  header {
+    background: linear-gradient(135deg, #1c1124 0%, #2b0d26 50%, #15091a 100%);
+    border-bottom: 1px solid var(--border);
+    padding: 1rem 1.5rem;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.4);
+    z-index: 10;
+  }
+  .header-brand {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+  }
+  .brand-icon {
+    width: 38px;
+    height: 38px;
+    border-radius: 10px;
+    background: linear-gradient(135deg, var(--accent) 0%, var(--gold) 100%);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.3rem;
+    box-shadow: 0 2px 10px var(--accent-glow);
+  }
+  .header-titles h1 {
+    margin: 0;
+    font-family: "Playfair Display", Georgia, serif;
+    font-size: 1.35rem;
+    font-weight: 700;
+    letter-spacing: 0.5px;
+    background: linear-gradient(90deg, #fff 0%, #fce4ec 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+  }
+  .header-titles p {
+    margin: 0;
+    font-size: 0.8rem;
+    color: var(--text-secondary);
+  }
+  .header-badge {
+    background: rgba(194, 24, 91, 0.15);
+    border: 1px solid rgba(194, 24, 91, 0.35);
+    color: #ff80ab;
+    padding: 0.3rem 0.65rem;
+    border-radius: 20px;
+    font-size: 0.75rem;
+    font-weight: 600;
+    display: flex;
+    align-items: center;
+    gap: 0.35rem;
+  }
+  .header-badge::before {
+    content: "";
+    display: inline-block;
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: #00e676;
+    box-shadow: 0 0 8px #00e676;
+  }
+  #log {
+    flex: 1;
+    overflow-y: auto;
+    padding: 1.5rem 1.2rem;
+    max-width: 860px;
+    width: 100%;
+    margin: 0 auto;
+    scroll-behavior: smooth;
+  }
+  .msg {
+    margin: 1.1rem 0;
+    display: flex;
+    flex-direction: column;
+    animation: fadeIn 0.25s ease-out;
+  }
+  @keyframes fadeIn {
+    from { opacity: 0; transform: translateY(6px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+  .msg.user { align-items: flex-end; }
+  .msg.agent { align-items: flex-start; }
+  .msg-author {
+    font-size: 0.75rem;
+    color: var(--text-muted);
+    margin-bottom: 0.35rem;
+    display: flex;
+    align-items: center;
+    gap: 0.4rem;
+  }
+  .bubble {
+    display: inline-block;
+    padding: 0.85rem 1.15rem;
+    border-radius: 16px;
+    background: var(--bg-surface);
+    border: 1px solid var(--border);
+    color: var(--text-primary);
+    text-align: left;
+    max-width: 88%;
+    line-height: 1.55;
+    font-size: 0.95rem;
+    white-space: pre-wrap;
+    box-shadow: 0 4px 14px rgba(0,0,0,0.25);
+  }
+  .msg.user .bubble {
+    background: linear-gradient(135deg, var(--accent) 0%, var(--accent-dark) 100%);
+    color: #fff;
+    border: none;
+    border-bottom-right-radius: 4px;
+    box-shadow: 0 4px 15px var(--accent-glow);
+  }
+  .msg.agent .bubble { border-bottom-left-radius: 4px; }
+  .bubble.rich {
+    background: transparent;
+    border: none;
+    padding: 0;
+    max-width: 100%;
+    white-space: normal;
+    box-shadow: none;
+  }
+
+  /* --- Quick Prompts Bar --- */
+  .prompts-container {
+    max-width: 860px;
+    width: 100%;
+    margin: 0 auto;
+    padding: 0.4rem 1.2rem;
+    display: flex;
+    gap: 0.5rem;
+    overflow-x: auto;
+    scrollbar-width: none;
+  }
+  .prompts-container::-webkit-scrollbar { display: none; }
+  .prompt-chip {
+    background: var(--bg-surface);
+    border: 1px solid var(--border);
+    color: var(--text-secondary);
+    padding: 0.45rem 0.85rem;
+    border-radius: 20px;
+    font-size: 0.8rem;
+    font-family: inherit;
+    cursor: pointer;
+    white-space: nowrap;
+    transition: all 0.2s ease;
+    display: flex;
+    align-items: center;
+    gap: 0.4rem;
+  }
+  .prompt-chip:hover {
+    background: var(--bg-card);
+    color: #fff;
+    border-color: var(--accent);
+    transform: translateY(-1px);
+    box-shadow: 0 2px 8px var(--accent-glow);
+  }
+
+  /* --- Input Area --- */
+  .chat-footer {
+    background: var(--bg-surface);
+    border-top: 1px solid var(--border);
+    padding: 0.6rem 0 1rem;
+  }
+  form {
+    display: flex;
+    gap: 0.6rem;
+    padding: 0.4rem 1.2rem 0;
+    max-width: 860px;
+    margin: 0 auto;
+    width: 100%;
+  }
+  input {
+    flex: 1;
+    padding: 0.85rem 1.15rem;
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    font-size: 0.95rem;
+    font-family: inherit;
+    color: var(--text-primary);
+    outline: none;
+    transition: border-color 0.2s, box-shadow 0.2s;
+  }
+  input::placeholder { color: var(--text-muted); }
+  input:focus {
+    border-color: var(--accent);
+    box-shadow: 0 0 0 3px var(--accent-glow);
+  }
+  button {
+    padding: 0.85rem 1.4rem;
+    border: none;
+    border-radius: 12px;
+    background: linear-gradient(135deg, var(--accent) 0%, var(--accent-dark) 100%);
+    color: #fff;
+    font-weight: 600;
+    font-size: 0.95rem;
+    font-family: inherit;
+    cursor: pointer;
+    transition: opacity 0.2s, transform 0.1s;
+    display: flex;
+    align-items: center;
+    gap: 0.4rem;
+  }
+  button:hover { opacity: 0.92; }
+  button:active { transform: scale(0.98); }
+
+  /* --- A2UI Card Styling --- */
+  .a2card {
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    padding: 1.3rem;
+    background: var(--bg-card);
+    box-shadow: 0 6px 22px rgba(0,0,0,0.35);
+    max-width: 100%;
+    border-top: 3px solid var(--accent);
+  }
+  .a2card + .a2card, .a2col > .a2card { margin-top: 0.8rem; }
+  .a2col { display: flex; flex-direction: column; gap: 0.6rem; }
+  .a2row { display: flex; flex-direction: row; gap: 0.75rem; align-items: center; flex-wrap: wrap; }
+  .a2row.between { justify-content: space-between; }
+  .a2text { margin: 0; line-height: 1.5; color: var(--text-primary); }
+  .a2text.a2-h1 { font-family: "Playfair Display", Georgia, serif; font-size: 1.55rem; font-weight: 700; color: #fff; margin-bottom: 0.25rem; }
+  .a2text.a2-h2 { font-family: "Playfair Display", Georgia, serif; font-size: 1.3rem; font-weight: 700; color: #fff; }
+  .a2text.a2-h3 { font-size: 1.05rem; font-weight: 600; color: #ff80ab; margin-top: 0.25rem; }
+  .a2text.a2-h4 { font-size: 0.95rem; font-weight: 600; color: var(--gold); }
+  .a2text.a2-caption { font-size: 0.85rem; color: var(--text-secondary); background: rgba(255,255,255,0.04); padding: 0.35rem 0.6rem; border-radius: 6px; display: inline-block; }
+  .a2divider { border: none; border-top: 1px solid var(--border); margin: 0.6rem 0; width: 100%; }
+  .a2img { max-width: 100%; border-radius: 12px; display: block; border: 1px solid var(--border); box-shadow: 0 4px 16px rgba(0,0,0,0.4); margin: 0.4rem 0; }
+  .a2video { max-width: 100%; width: 100%; border-radius: 12px; display: block; border: 1px solid var(--border); box-shadow: 0 4px 16px rgba(0,0,0,0.4); margin: 0.4rem 0; background: #000; }
+  .material-symbols-outlined { font-family: "Material Symbols Outlined"; font-size: 1.25rem; line-height: 1; vertical-align: middle; color: var(--accent); }
+</style>
+</head>
+<body>
+<header>
+  <div class="header-brand">
+    <div class="brand-icon">💃</div>
+    <div class="header-titles">
+      <h1>BachataFlow Coach</h1>
+      <p>Sensual • Modern • Dominican Dance Instructor</p>
+    </div>
+  </div>
+  <div class="header-badge">Agent Active</div>
+</header>
+
+<div id="log"></div>
+
+<div class="chat-footer">
+  <div class="prompts-container">
+    <button type="button" class="prompt-chip" data-query="Teach me the Madrid Step breakdown with an illustration">
+      <span>✨</span> Madrid Step & Illustration
+    </button>
+    <button type="button" class="prompt-chip" data-query="Recommend a 125 BPM Sensual Bachata song and practice routine">
+      <span>🎵</span> 125 BPM Song & Routine
+    </button>
+    <button type="button" class="prompt-chip" data-query="Generate an instructional video demonstration of Dominican syncopated footwork">
+      <span>🎬</span> Video Footwork Demo
+    </button>
+  </div>
+  <form id="form">
+    <input id="input" placeholder="Ask for a move breakdown, song recommendation, illustration, or video clip…" autocomplete="off" autofocus>
+    <button type="submit">
+      <span>Send</span>
+      <span class="material-symbols-outlined" style="font-size:1.1rem; color:#fff;">send</span>
+    </button>
+  </form>
+</div>
+
+<script>
+const log = document.getElementById("log");
+const form = document.getElementById("form");
+const input = document.getElementById("input");
+
+function el(tag, cls, text) {
+  const e = document.createElement(tag);
+  if (cls) e.className = cls;
+  if (text != null) e.textContent = text;
+  return e;
+}
+
+function bubble(who) {
+  const m = el("div", "msg " + who);
+  const author = el("div", "msg-author", who === "user" ? "You" : "BachataFlow Coach");
+  m.appendChild(author);
+  const b = el("div", "bubble");
+  m.appendChild(b);
+  log.appendChild(m);
+  log.scrollTop = log.scrollHeight;
+  return b;
+}
+
+function boundStr(v) {
+  if (v == null) return "";
+  if (typeof v === "string") return v;
+  if (typeof v.literalString === "string") return v.literalString;
+  return "";
+}
+
+function childIds(props) {
+  const ids = [];
+  if (props && typeof props.child === "string") ids.push(props.child);
+  const ch = props && props.children;
+  if (ch && Array.isArray(ch.explicitList)) for (const c of ch.explicitList) if (typeof c === "string") ids.push(c);
+  return ids;
+}
+
+function iconName(n) { return String(n || "").replace(/([a-z0-9])([A-Z])/g, "$1_$2").replace(/\s+/g, "_").toLowerCase(); }
+
+function buildNode(id, comps, seen) {
+  if (!id || seen.has(id)) return null;
+  seen.add(id);
+  const spec = comps[id];
+  if (!spec || typeof spec !== "object") return null;
+  const type = Object.keys(spec)[0];
+  const props = spec[type] || {};
+  const kids = () => childIds(props).map(cid => buildNode(cid, comps, seen)).filter(Boolean);
+
+  switch (type) {
+    case "Card": {
+      const d = el("div", "a2card"); kids().forEach(n => d.appendChild(n)); return d;
+    }
+    case "Column":
+    case "List": {
+      const horizontal = type === "List" && props.direction === "horizontal";
+      const d = el("div", horizontal ? "a2row" : "a2col"); kids().forEach(n => d.appendChild(n)); return d;
+    }
+    case "Row": {
+      const d = el("div", "a2row" + (props.distribution === "spaceBetween" ? " between" : ""));
+      kids().forEach(n => d.appendChild(n)); return d;
+    }
+    case "Text": {
+      const textVal = boundStr(props.text);
+      if (/^https?:\/\/.*\.mp4(\?.*)?$/i.test(textVal.trim())) {
+        const v = el("video", "a2video");
+        v.src = textVal.trim();
+        v.controls = true;
+        v.autoplay = false;
+        v.loop = true;
+        return v;
+      }
+      const t = el("div", "a2text");
+      const hint = String(props.usageHint || "body").toLowerCase();
+      if (["h1", "h2", "h3", "h4", "h5", "h6"].includes(hint)) t.classList.add("a2-" + hint);
+      else if (hint === "caption") t.classList.add("a2-caption");
+      t.textContent = textVal;
+      return t;
+    }
+    case "Divider":
+      return el("hr", "a2divider");
+    case "Image": {
+      const src = boundStr(props.url || props.src);
+      if (!/^https?:\/\//i.test(src)) return null;
+      if (/\.mp4(\?.*)?$/i.test(src)) {
+        const v = el("video", "a2video");
+        v.src = src;
+        v.controls = true;
+        v.autoplay = false;
+        v.loop = true;
+        return v;
+      }
+      const img = el("img", "a2img");
+      img.src = src;
+      img.alt = boundStr(props.alt) || "Bachata Illustration";
+      return img;
+    }
+    case "Icon": {
+      const s = el("span", "material-symbols-outlined");
+      s.textContent = iconName(boundStr(props.name) || props.name);
+      return s;
+    }
+    default:
+      return null;
+  }
+}
+
+function renderSurface(messages, container) {
+  const comps = {};
+  const roots = [];
+  for (const m of messages) {
+    if (m.beginRendering && typeof m.beginRendering.root === "string") roots.push(m.beginRendering.root);
+    const su = m.surfaceUpdate;
+    if (su && Array.isArray(su.components)) for (const c of su.components) if (c && c.id && c.component) comps[c.id] = c.component;
+  }
+  let rootIds = roots.filter(r => comps[r]);
+  if (rootIds.length === 0) {
+    const referenced = new Set();
+    for (const id in comps) {
+      const spec = comps[id];
+      childIds(spec[Object.keys(spec)[0]] || {}).forEach(c => referenced.add(c));
+    }
+    rootIds = Object.keys(comps).filter(id => !referenced.has(id));
+  }
+  let drew = false;
+  for (const rid of rootIds) {
+    const node = buildNode(rid, comps, new Set());
+    if (node) { container.appendChild(node); drew = true; }
+  }
+  return drew;
+}
+
+function flattenText(messages) {
+  const out = [];
+  for (const m of messages) {
+    const su = m.surfaceUpdate;
+    if (su && Array.isArray(su.components)) {
+      for (const c of su.components) {
+        if (c && c.component && c.component.Text) out.push(boundStr(c.component.Text.text));
+      }
+    }
+  }
+  return out.join("\n").trim();
+}
+
+function renderReply(b, parts) {
+  b.textContent = "";
+  const texts = parts.filter(p => p && (p.kind === "text" || (!p.kind && p.text))).map(p => p.text || "");
+  const a2ui = parts.filter(p => p && p.kind === "a2ui" && p.data).map(p => p.data);
+
+  for (const textStr of texts) {
+    if (textStr) {
+      if (/^https?:\/\/.*\.mp4(\?.*)?$/i.test(textStr.trim())) {
+        const v = el("video", "a2video");
+        v.src = textStr.trim();
+        v.controls = true;
+        b.appendChild(v);
+      } else {
+        b.appendChild(el("div", null, textStr));
+      }
+    }
+  }
+
+  if (a2ui.length) {
+    b.classList.add("rich");
+    if (!renderSurface(a2ui, b)) {
+      b.appendChild(el("div", null, flattenText(a2ui) || "(no card content)"));
+    }
+  }
+  if (!b.childNodes.length) b.textContent = "(no response)";
+  log.scrollTop = log.scrollHeight;
+}
+
+async function sendMessage(text) {
+  if (!text) return;
+  bubble("user").textContent = text;
+  input.value = "";
+  const b = bubble("agent");
+  b.textContent = "Coach is thinking…";
+  try {
+    const res = await fetch("/chat", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ message: text })
+    });
+    const raw = await res.text();
+    let data;
+    try { data = JSON.parse(raw); }
+    catch { throw new Error(`Server returned non-JSON (HTTP ${res.status}). ${raw.slice(0, 300)}`); }
+    renderReply(b, data.parts || []);
+  } catch (e) {
+    b.textContent = "Error: " + e.message;
+  }
+}
+
+form.addEventListener("submit", (ev) => {
+  ev.preventDefault();
+  sendMessage(input.value.trim());
+});
+
+document.querySelectorAll(".prompt-chip").forEach(btn => {
+  btn.addEventListener("click", () => {
+    const query = btn.getAttribute("data-query");
+    if (query) sendMessage(query);
+  });
+});
+</script>
+</body>
+</html>
