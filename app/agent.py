@@ -14,6 +14,7 @@
 # limitations under the License.
 
 import base64
+import os
 import re
 import uuid
 from typing import Any, Dict, List, Optional
@@ -33,15 +34,15 @@ from .a2ui_utils import a2ui_callback
 MODEL = "gemini-3.6-flash"
 IMAGE_MODEL = "gemini-3.1-flash-lite-image"
 
-# Hardcoded project ID, GCS bucket, Sandbox resource, and Memory Bank ID as strings to prevent resolution issues
-FIRESTORE_PROJECT_ID = "qwiklabs-gcp-04-5c25b84392c4"
-COLLECTION_NAME = "bachata_moves"
-GCS_BUCKET_NAME = "bachataflow-coach-qwiklabs-gcp-04-5c25b84392c4"
-SANDBOX_RESOURCE_NAME = (
-    "projects/100973615551/locations/us-central1/reasoningEngines/7274940125656645632/"
-    "sandboxEnvironments/1819899001911115776"
+# Configurable via environment variables with fallback defaults
+FIRESTORE_PROJECT_ID = os.environ.get("GOOGLE_CLOUD_PROJECT", "qwiklabs-gcp-04-5c25b84392c4")
+COLLECTION_NAME = os.environ.get("COLLECTION_NAME", "bachata_moves")
+GCS_BUCKET_NAME = os.environ.get("GCS_BUCKET_NAME", f"bachataflow-coach-{FIRESTORE_PROJECT_ID}")
+SANDBOX_RESOURCE_NAME = os.environ.get(
+    "SANDBOX_RESOURCE_NAME",
+    "projects/100973615551/locations/us-central1/reasoningEngines/7274940125656645632/sandboxEnvironments/1819899001911115776"
 )
-MEMORY_BANK_ID = "7274940125656645632"
+MEMORY_BANK_ID = os.environ.get("MEMORY_BANK_ID", "7274940125656645632")
 
 async def generate_memories_callback(callback_context: CallbackContext):
     """After each turn, send the session events to Memory Bank for extraction."""
