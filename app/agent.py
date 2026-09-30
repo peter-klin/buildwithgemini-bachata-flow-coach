@@ -35,9 +35,13 @@ MODEL = "gemini-3.6-flash"
 IMAGE_MODEL = "gemini-3.1-flash-lite-image"
 
 # Configurable via environment variables with fallback defaults
-FIRESTORE_PROJECT_ID = os.environ.get("GOOGLE_CLOUD_PROJECT", "qwiklabs-gcp-04-5c25b84392c4")
+# Note: Google Cloud Firestore requires the string project ID (e.g. qwiklabs-gcp-04-5c25b84392c4),
+# whereas Agent Runtime sets GOOGLE_CLOUD_PROJECT to the numeric project number (e.g. 100973615551).
+_raw_proj = os.environ.get("GCP_PROJECT_ID") or os.environ.get("GOOGLE_CLOUD_PROJECT") or "qwiklabs-gcp-04-5c25b84392c4"
+FIRESTORE_PROJECT_ID = "qwiklabs-gcp-04-5c25b84392c4" if _raw_proj.isdigit() else _raw_proj
+
 COLLECTION_NAME = os.environ.get("COLLECTION_NAME", "bachata_moves")
-GCS_BUCKET_NAME = os.environ.get("GCS_BUCKET_NAME", f"bachataflow-coach-{FIRESTORE_PROJECT_ID}")
+GCS_BUCKET_NAME = os.environ.get("GCS_BUCKET_NAME", f"bachataflow-coach-qwiklabs-gcp-04-5c25b84392c4")
 SANDBOX_RESOURCE_NAME = os.environ.get(
     "SANDBOX_RESOURCE_NAME",
     "projects/100973615551/locations/us-central1/reasoningEngines/7274940125656645632/sandboxEnvironments/1819899001911115776"
@@ -72,23 +76,26 @@ def list_bachata_moves(
     Returns:
         A list of move dictionaries with names, styles, counts, and lead/follow cues.
     """
-    db = get_firestore_client()
-    moves_ref = db.collection(COLLECTION_NAME)
-    docs = moves_ref.stream()
+    try:
+        db = get_firestore_client()
+        moves_ref = db.collection(COLLECTION_NAME)
+        docs = moves_ref.stream()
 
-    results = []
-    for doc in docs:
-        data = doc.to_dict()
-        data["id"] = doc.id
-        
-        # Apply optional filtering
-        if style and style.lower() not in data.get("style", "").lower():
-            continue
-        if difficulty and difficulty.lower() != data.get("difficulty", "").lower():
-            continue
-        results.append(data)
+        results = []
+        for doc in docs:
+            data = doc.to_dict()
+            data["id"] = doc.id
+            
+            # Apply optional filtering
+            if style and style.lower() not in data.get("style", "").lower():
+                continue
+            if difficulty and difficulty.lower() != data.get("difficulty", "").lower():
+                continue
+            results.append(data)
 
-    return results
+        return results
+    except Exception as e:
+        return [{"name": "Basic Bachata Step", "style": "Traditional/Modern", "difficulty": "Beginner", "counts": "1-2-3-tap(4), 5-6-7-tap(8)", "error": f"Database unavailable: {str(e)}"}]
 
 
 def get_bachata_move_details(move_name_or_id: str) -> Dict[str, Any]:
@@ -100,24 +107,27 @@ def get_bachata_move_details(move_name_or_id: str) -> Dict[str, Any]:
     Returns:
         A dictionary containing full move information, or an error message if not found.
     """
-    db = get_firestore_client()
-    doc_id = re.sub(r"[^a-zA-Z0-9]+", "-", move_name_or_id.strip().lower()).strip("-")
-    
-    # Try direct ID lookup
-    doc = db.collection(COLLECTION_NAME).document(doc_id).get()
-    if doc.exists:
-        data = doc.to_dict()
-        data["id"] = doc.id
-        return data
-
-    # Fallback to search by name substring
-    for d in db.collection(COLLECTION_NAME).stream():
-        data = d.to_dict()
-        if move_name_or_id.lower() in data.get("name", "").lower():
-            data["id"] = d.id
+    try:
+        db = get_firestore_client()
+        doc_id = re.sub(r"[^a-zA-Z0-9]+", "-", move_name_or_id.strip().lower()).strip("-")
+        
+        # Try direct ID lookup
+        doc = db.collection(COLLECTION_NAME).document(doc_id).get()
+        if doc.exists:
+            data = doc.to_dict()
+            data["id"] = doc.id
             return data
 
-    return {"error": f"Move '{move_name_or_id}' not found in the catalog."}
+        # Fallback to search by name substring
+        for d in db.collection(COLLECTION_NAME).stream():
+            data = d.to_dict()
+            if move_name_or_id.lower() in data.get("name", "").lower():
+                data["id"] = d.id
+                return data
+
+        return {"error": f"Move '{move_name_or_id}' not found in the catalog."}
+    except Exception as e:
+        return {"error": f"Failed to retrieve move details: {str(e)}"}
 
 
 def save_bachata_move(
