@@ -1,0 +1,32 @@
+{
+  "eval_cases": [
+    {
+      "eval_case_id": "bachata_move_breakdown",
+      "prompt": {
+        "role": "user",
+        "parts": [{"text": "Can you give me the 8-count timing breakdown and lead cues for the Madrid Step?"}]
+      }
+    },
+    {
+      "eval_case_id": "song_recommendation",
+      "prompt": {
+        "role": "user",
+        "parts": [{"text": "Recommend a 125 BPM Sensual Bachata track with an audio preview."}]
+      }
+    },
+    {
+      "eval_case_id": "youtube_master_tutorials",
+      "prompt": {
+        "role": "user",
+        "parts": [{"text": "Show me real YouTube master tutorials for Sensual Bachata body waves by Korke and Judith."}]
+      }
+    },
+    {
+      "eval_case_id": "combo_transitions",
+      "prompt": {
+        "role": "user",
+        "parts": [{"text": "What move flows seamlessly after a Madrid Step? Build me a combo."}]
+      }
+    }
+  ]
+}

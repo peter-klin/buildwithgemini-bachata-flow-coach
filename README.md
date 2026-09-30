@@ -216,6 +216,33 @@ export AGENT_DIRECTORY="app"
 export PORT="8080"
 python main.py
 ```
+
+---
+
+## 🧪 Evaluation & Quality Flywheel
+
+BachataFlow Coach includes a built-in evaluation harness using **LLM-as-a-judge** to benchmark coaching accuracy, timing breakdown fidelity, and safety:
+
+```bash
+# Run full evaluation over test dataset
+agents-cli eval run
+
+# Run specific domain dataset
+agents-cli eval run --dataset tests/eval/datasets/bachata-eval-dataset.json
+
+# Test directly against deployed Cloud Run frontend
+agents-cli eval generate --url https://bachataflow-coach-ui-100973615551.us-central1.run.app --app-name app
+```
+
+---
+
+## 🔄 CI/CD Pipeline (GitHub Actions)
+
+The repository includes a ready-to-use GitHub Actions workflow (`.github/workflows/ci.yml`) that:
+1. **Automated Unit Testing**: Runs all 12 test cases in `test_tools.py` on every commit and pull request.
+2. **Quality Evaluation**: Validates evaluation datasets and tests LLM grading rubrics on pull requests.
+3. **Automated Deployment**: Automatically deploys updates to Google Cloud Run and Vertex AI Agent Runtime when merged into `main` (requires optional `GCP_SA_KEY` secret).
+
 Navigate to [http://localhost:8080](http://localhost:8080).
 
 ---
