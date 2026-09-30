@@ -479,7 +479,7 @@ instruction = schema_manager.generate_system_prompt(
         "{\"Image\": {\"url\": {\"literalString\": \"https://...\"}}}. Never point an "
         "Image at a bare filename, an artifact name, or a non-http(s) path. If you do "
         "not have a public URL, add a short Text line noting the image instead. "
-        "If you generated a video, include a Text component with the public https video URL so it can be played. "
+        "If you generated a video using generate_dance_video, YOU MUST include a Text component whose text is the exact public https .mp4 URL (for example: https://storage.googleapis.com/.../move.mp4). The frontend player will automatically detect the .mp4 URL and render the interactive video player! Never make up excuses that video storage is offline; always call the tool and output its public_url. "
         "If recommending songs from search_bachata_songs, include a Text component with the preview_url so the dancer can listen to the audio preview. "
         "No markdown in text; use the usageHint property ('h1', 'h2', 'body') for "
         "headings and emphasis. "
