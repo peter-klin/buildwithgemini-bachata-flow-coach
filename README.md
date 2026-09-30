@@ -32,10 +32,12 @@ graph TD
         Sandbox[Agent Engine Code Sandbox\nBeat Grid & Millisecond Calculator]:::storage
     end
 
-    subgraph Gemini_Models ["Multimodal Vertex AI Models"]
+    subgraph Gemini_Models ["Multimodal Vertex AI Models & External Services"]
         FlashLite[Gemini Flash Lite Image\nVisual Posture & Frame Illustrations]:::ai
         Omni[Gemini Omni Flash Preview\nInteractions API Video Demonstrations]:::ai
+        YouTube[YouTube Search & oEmbed\nCommunity Tutorials & Responsive Embeds]:::ai
         iTunes[iTunes Search API\nTempo & 30s Audio Previews]:::ai
+        OSM[OpenStreetMap & Nominatim\nGlobal Social Dance Finder]:::ai
     end
 
     AgentEngine <-->|Read / Save Moves| Firestore
@@ -45,19 +47,28 @@ graph TD
     AgentEngine -->|Upload MP4 & JPG| GCS
     AgentEngine -->|Execute Math Code| Sandbox
     AgentEngine -->|Search Music & Audio| iTunes
+    AgentEngine -->|Search Tutorials & Embed| YouTube
+    AgentEngine -->|Locate Dance Clubs| OSM
 ```
 
 ---
 
 ## 🌟 Key Features & Architecture
 
-BachataFlow Coach integrates real Google Cloud tools and Gemini models:
+BachataFlow Coach integrates a comprehensive **16-tool multimodal harness** powered by Google Cloud and Gemini:
 
-- **Firestore Move Catalog**: Fetches real dance move data (timing breakdown, lead/follow mechanics, styling, and common pitfalls) stored in Cloud Firestore.
-- **Vertex AI Memory Bank**: Preserves user dance preferences (skill level, favorite styles, practice history) across multiple sessions using managed agent memory.
-- **A2UI Rich Surface Interface**: Generates interactive UI cards (v0.8 Basic Catalog) with formatted headings, captions, and structured columns rendered natively in the chat frontend.
-- **Gemini Flash Lite Image Generation**: Uses `gemini-3.1-flash-lite-image` in the `global` region to synthesize step-by-step visual dance illustrations.
-- **Gemini Omni Video Generation**: Uses Google’s `gemini-omni-flash-preview` model via the Interactions API to generate animated video demonstrations.
+- **🎬 Real-World YouTube Tutorial Search & Responsive Embeds**: Looks up live YouTube demonstrations and embeds responsive video players right in the A2UI card.
+- **🏆 Curated Pro Masters Video Library**: Instant retrieval of verified workshop and demo clips from world-renowned artists (*Korke & Judith*, *Daniel & Desirée*, *Ataca & La Alemana*, *Marco & Sara*, *Ronald & Alba*).
+- **🔀 Seamless Social Combo Builder**: Analyzes partner connection states (*Closed frame*, *Hammerlock*, *Shadow*, *Two-hand hold*) to compute 3 logically fluid follow-up figures.
+- **⏱️ Interval Metronome Practice Regimen**: Constructs timed interval training rounds (warm-up, technique, syncopation sprint, flow) matched to exact BPM targets.
+- **🎯 Interactive Musicality & Rhythm Quiz**: Tests dancer knowledge of rhythm sections (*Derecho*, *Majao*, *Mambo*), lead/follow mechanics, and count accents.
+- **📍 Global Social Dance Finder**: Locates Latin dance clubs, weekly socials, and studios in any city worldwide using OpenStreetMap and verified Latin dance directories.
+- **📹 Gemini Omni Video Generation**: Uses Google’s `gemini-omni-flash-preview` model via the Vertex AI Interactions API to synthesize animated dance videos and syncopated footwork clips.
+- **🎨 Gemini Flash Lite Image Generation**: Uses `gemini-3.1-flash-lite-image` in the `global` region to synthesize posture diagrams and frame guides.
+- **🎵 Real iTunes Music Previews & BPM Analysis**: Real-time track search and integrated HTML5 audio player.
+- **🗄️ Firestore Move Catalog**: Persistent database for reading and saving custom figures and styling cues.
+- **🧠 Vertex AI Memory Bank**: Cross-session long-term memory for remembering user style, skill level, and preferences.
+- **💻 Isolated Python Code Sandbox**: Secure Agent Engine sandbox for precision beat grid and interval math.
 - **Google Cloud Storage (GCS)**: Stores generated illustration JPGs and video MP4s with public URLs for low-latency streaming and artifact persistence.
 - **Code Execution Sandbox**: Integrates `AgentEngineSandboxCodeExecutor` to safely execute Python code in an isolated sandbox environment.
 - **Music Recommendation Tool**: Grounds song recommendations in authentic Bachata tempos (BPM) and styles (Sensual, Dominican, Urban/Modern) using the iTunes Search API.

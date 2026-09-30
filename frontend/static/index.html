@@ -120,6 +120,25 @@
     border-color: var(--accent);
     color: #fff;
   }
+  .a2youtube-wrapper {
+    position: relative;
+    padding-bottom: 56.25%; /* 16:9 aspect ratio */
+    height: 0;
+    overflow: hidden;
+    max-width: 100%;
+    border-radius: 12px;
+    margin: 0.6rem 0;
+    box-shadow: 0 4px 16px rgba(0,0,0,0.4);
+    border: 1px solid var(--border);
+  }
+  .a2youtube-frame {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    border: 0;
+  }
   .a2audio-wrapper {
     background: rgba(255, 255, 255, 0.03);
     border: 1px solid var(--border);
@@ -336,14 +355,23 @@
 
 <div class="chat-footer">
   <div class="prompts-container">
-    <button type="button" class="prompt-chip" data-query="Teach me the Madrid Step breakdown with an illustration">
-      <span>✨</span> Madrid Step & Illustration
+    <button type="button" class="prompt-chip" data-query="Show me real YouTube master tutorials for Sensual Bachata body waves by Korke and Judith">
+      <span>🎬</span> YouTube Master Clips
+    </button>
+    <button type="button" class="prompt-chip" data-query="What move flows seamlessly after a Madrid Step? Build me a combo">
+      <span>🔀</span> Combo Flow Builder
+    </button>
+    <button type="button" class="prompt-chip" data-query="Give me a Bachata musicality and rhythm quiz">
+      <span>🎯</span> Musicality Quiz
+    </button>
+    <button type="button" class="prompt-chip" data-query="Generate an instructional video demonstration of Dominican syncopated footwork">
+      <span>🎥</span> Omni Video Demo
+    </button>
+    <button type="button" class="prompt-chip" data-query="Where can I go social dancing in New York or Madrid?">
+      <span>📍</span> Social Dance Finder
     </button>
     <button type="button" class="prompt-chip" data-query="Recommend a 125 BPM Sensual Bachata song and practice routine">
       <span>🎵</span> 125 BPM Song & Routine
-    </button>
-    <button type="button" class="prompt-chip" data-query="Generate an instructional video demonstration of Dominican syncopated footwork">
-      <span>🎬</span> Video Footwork Demo
     </button>
   </div>
   <form id="form">
@@ -427,6 +455,17 @@ function buildNode(id, comps, seen) {
         v.autoplay = false;
         v.loop = true;
         return v;
+      }
+      const ytMatch = trimmed.match(/(?:https?:\/\/)?(?:www\.)?(?:youtube\.com\/(?:watch\?v=|embed\/|shorts\/)|youtu\.be\/)([a-zA-Z0-9_-]{11})/i);
+      if (ytMatch) {
+        const wrap = el("div", "a2youtube-wrapper");
+        const ifr = el("iframe", "a2youtube-frame");
+        ifr.src = "https://www.youtube.com/embed/" + ytMatch[1];
+        ifr.title = "Bachata Demonstration Video";
+        ifr.allow = "accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture";
+        ifr.allowFullscreen = true;
+        wrap.appendChild(ifr);
+        return wrap;
       }
       if (/^https?:\/\/.*(\.m4a|\.mp3|\.aac|audio-preview)(\?.*)?$/i.test(trimmed)) {
         const wrap = el("div", "a2audio-wrapper");
