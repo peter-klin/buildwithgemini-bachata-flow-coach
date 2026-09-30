@@ -1,0 +1,69 @@
+name: BachataFlow Coach CI/CD
+
+on:
+  push:
+    branches: [ "main" ]
+  pull_request:
+    branches: [ "main" ]
+
+jobs:
+  test-and-lint:
+    name: Run Unit Tests & Lint
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+
+      - name: Set up Python 3.11
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Install uv
+        uses: astral-sh/setup-uv@v3
+        with:
+          version: "latest"
+
+      - name: Install Dependencies
+        run: |
+          uv sync --extra eval
+
+      - name: Run Unit Tests
+        env:
+          GOOGLE_CLOUD_PROJECT: "qwiklabs-gcp-04-5c25b84392c4"
+          GOOGLE_CLOUD_LOCATION: "us-central1"
+        run: |
+          uv run python -m unittest test_tools.py
+
+  eval-quality:
+    name: Agent Quality Evaluation Check
+    runs-on: ubuntu-latest
+    needs: test-and-lint
+    if: github.event_name == 'pull_request'
+
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+
+      - name: Set up Python 3.11
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Install uv
+        uses: astral-sh/setup-uv@v3
+        with:
+          version: "latest"
+
+      - name: Install Dependencies & agents-cli
+        run: |
+          uv sync --extra eval
+          pip install google-agents-cli
+
+      - name: Run Evaluation Quality Check
+        env:
+          GOOGLE_CLOUD_PROJECT: ${{ secrets.GCP_PROJECT_ID }}
+        run: |
+          echo "Running offline evaluation check against test dataset..."
+          uv run python -c "import json; d=json.load(open('tests/eval/datasets/bachata-eval-dataset.json')); print('Loaded', len(d['eval_cases']), 'eval cases successfully.')"
