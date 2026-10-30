@@ -1,6 +1,6 @@
 # BachataFlow Coach 💃
 
-An intelligent, multi-modal dance instructor agent built with the Google Agent Development Kit (ADK) and deployed to Google Cloud Agent Platform (Agent Runtime) and Cloud Run. BachataFlow Coach helps dancers learn Bachata fundamentals, breakdown complex Sensual, Modern, and Dominican patterns, discover tempo-matched practice music, and visualize moves with AI-generated illustrations and video demonstrations.
+An intelligent, multi-modal dance instructor agent built with the Google Agent Development Kit (ADK) and deployed to Google Cloud Agent Platform (Agent Runtime) and Cloud Run. BachataFlow Coach helps dancers learn Bachata fundamentals, break down complex Sensual, Modern, and Dominican patterns, discover tempo-matched practice music, and visualize moves with AI-generated illustrations and video demonstrations.
 
 <p align="center">
   <img src="bachata_video_demo.gif" alt="AI Generated Bachata Video Demo" width="48%" />
